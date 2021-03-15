@@ -13,7 +13,6 @@ const Home = (props) => {
                     style={style.headerUsers}
                     horizontal
                 >
-
                     <View style={style.person}>
                         <Image style={style.images} source={require('../images/Ben.jpeg')} />
                         <Text style={{ textAlign: 'center', color: 'white' }}>Yiğit</Text>
@@ -44,6 +43,20 @@ const Home = (props) => {
             <View style={{ flex: 4 }}>
                 <ScrollView >
                     <View style={style.cards} >
+                        <TouchableOpacity onPress={() => props.navigation.navigate('Chat')}>
+                            <View style={style.card}>
+                                <View style={style.inCard}>
+                                    <Image style={style.inCardImage} source={require('../images/Ben.jpeg')} />
+                                    <View style={style.inCardRoomName}>
+                                        <Text style={{ color: '#CECECE', fontSize: hp('2.5%') }}>Public Chat</Text>
+                                        <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>Hello</Text>
+                                    </View>
+                                    <View style={style.inCardDate}>
+                                        <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>10.11.2021</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                         <View style={style.card}>
                             <View style={style.inCard}>
                                 <Image style={style.inCardImage} source={require('../images/Ben.jpeg')} />
@@ -128,23 +141,7 @@ const Home = (props) => {
                                 </View>
                             </View>
                         </View>
-                        <View style={style.card}>
-                            <View style={style.inCard}>
-                                <Image style={style.inCardImage} source={require('../images/Ben.jpeg')} />
-                                <View style={style.inCardRoomName}>
-                                    <Text style={{ color: '#CECECE', fontSize: hp('2.5%') }}>Public Chat</Text>
-                                    <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>Hello</Text>
-                                </View>
-                                <View style={style.inCardDate}>
-                                    <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>10.11.2021</Text>
-                                </View>
-                            </View>
-                        </View>
-
-
-
                     </View>
-
                 </ScrollView>
             </View>
             <View style={{ right: 0, bottom: 0, position: 'absolute', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: hp('15%'), width: wp('30%') }}>

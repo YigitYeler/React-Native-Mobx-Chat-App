@@ -29,19 +29,17 @@ import { createAppContainer } from 'react-navigation';
 
 //import Chat from './Chat';
 import Home from './Home';
-import Login from './Login';
-
+import Chat from './Chat';
 
 const MyApp = createStackNavigator({
+    Chat: {
+        screen: Chat,
+        navigationOptions: { headerShown: false }
+    },
     Home: {
         screen: Home,
         navigationOptions: { headerShown: false }
-    },
-    Chat: {
-        screen: Login,
-        navigationOptions: { headerShown: false }
     }
-
 
 })
 
