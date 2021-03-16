@@ -146,7 +146,7 @@ const Home = (props) => {
             </View>
             <View style={{ right: 0, bottom: 0, position: 'absolute', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: hp('15%'), width: wp('30%') }}>
                 <View style={style.icons}>
-                    <TouchableOpacity>
+                    <TouchableOpacity >
                         <Icon size={40} name={"comment-dots"} color='white' solid />
                     </TouchableOpacity>
                 </View>

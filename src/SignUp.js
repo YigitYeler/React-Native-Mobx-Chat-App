@@ -6,7 +6,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 
 
 
-const Login = (props) => {
+const SignUp = (props) => {
     return (
         <SafeAreaView style={style.body}>
             <View style={style.header}>
@@ -30,15 +30,24 @@ const Login = (props) => {
                     <View style={style.item}>
                         <TextInput
                             placeholderTextColor={'#707070'}
+                            placeholder={'Email'}
+                            style={style.input}
+                        />
+
+                    </View>
+                    <View style={style.item}>
+                        <TextInput
+                            placeholderTextColor={'#707070'}
                             placeholder={'Password'}
                             style={style.input}
+                            secureTextEntry={true}
                         />
 
                     </View>
 
                     <View style={style.item}>
-                        <TouchableOpacity style={style.button}>
-                            <Text style={style.button_text}>Login</Text>
+                        <TouchableOpacity style={style.button} onPress={() => props.navigation.navigate('Home')}>
+                            <Text style={style.button_text}>SignUp</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -46,7 +55,7 @@ const Login = (props) => {
 
 
 
-                <View style={[style.item], { alignItems: 'center' }}>
+                <View style={{ alignItems: 'center', marginTop: '2%' }}>
                     <Text style={{ color: 'white', fontSize: 17 }}>Or</Text>
                 </View>
                 <View style={style.social}>
@@ -61,8 +70,8 @@ const Login = (props) => {
                     </TouchableOpacity>
                 </View>
                 <View style={style.item}>
-                    <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center' }} onPress={() => props.navigation.navigate('SignUp')}>
-                        <Text style={{ fontSize: 17, fontWeight: '500', color: '#525464' }}>Don't have an account? <Text style={{ color: '#6443D4', fontWeight: '700' }}>Sign up</Text> </Text>
+                    <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center' }} onPress={() => props.navigation.navigate('Login')}>
+                        <Text style={{ fontSize: 17, fontWeight: '500', color: '#525464' }}>Already have an account? <Text style={{ color: '#6443D4', fontWeight: '700' }}>Sign In</Text> </Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -78,12 +87,12 @@ const style = StyleSheet.create({
     title: { fontWeight: "500", fontSize: hp('3%'), color: "#6443D4" },
     logo_area: { alignItems: 'center', marginTop: '5%' },
     board: { marginTop: '10%', paddingHorizontal: '8%' },
-    item: { marginBottom: '6%' },
+    item: { marginBottom: '4%' },
     input: { color: '#707070', backgroundColor: '#2A292B', borderRadius: 30, borderColor: '#6443D4', borderWidth: 3, paddingVertical: '3%', paddingHorizontal: '6%' },
     button: { borderRadius: 50, backgroundColor: '#6443D4', paddingVertical: '6%', justifyContent: 'center', alignItems: 'center' },
     button_text: { textAlign: 'center', color: 'white', fontSize: hp('2%'), fontWeight: '700' },
-    social: { flexDirection: 'row', justifyContent: 'space-around', marginTop: '10%', marginBottom: '10%' },
+    social: { flexDirection: 'row', justifyContent: 'space-around', marginTop: '5%', marginBottom: '8%' },
     social_item: { borderRadius: 50, padding: '5%', borderWidth: 2, borderColor: '#6443D4', width: wp('18%'), height: hp('7%'), justifyContent: 'center', alignItems: 'center' }
 })
 
-export default Login;
+export default SignUp;

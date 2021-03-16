@@ -30,17 +30,52 @@ import { createAppContainer } from 'react-navigation';
 //import Chat from './Chat';
 import Home from './Home';
 import Chat from './Chat';
+import Login from './Login';
+import SignUp from './SignUp'
 
-const MyApp = createStackNavigator({
-    Home: {
-        screen: Home,
-        navigationOptions: { headerShown: false }
-    },
-    Chat: {
-        screen: Chat,
-        navigationOptions: { headerShown: false }
-    }
 
-})
+if (false) {
+
+    var MyApp = createStackNavigator({
+        Home: {
+            screen: Home,
+            navigationOptions: { headerShown: false }
+        },
+        Chat: {
+            screen: Chat,
+            navigationOptions: { headerShown: false }
+        }
+
+
+    })
+
+}
+else {
+
+    var MyApp = createStackNavigator({
+        SignUp: {
+            screen: SignUp,
+            navigationOptions: { headerShown: false }
+        },
+        Login: {
+            screen: Login,
+            navigationOptions: { headerShown: false }
+        },
+        Home: {
+            screen: Home,
+            navigationOptions: { headerShown: false }
+        },
+        Chat: {
+            screen: Chat,
+            navigationOptions: { headerShown: false }
+        }
+
+    })
+
+}
 
 export default createAppContainer(MyApp);
+
+
+
+
