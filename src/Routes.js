@@ -32,12 +32,12 @@ import Home from './Home';
 import Chat from './Chat';
 
 const MyApp = createStackNavigator({
-    Chat: {
-        screen: Chat,
-        navigationOptions: { headerShown: false }
-    },
     Home: {
         screen: Home,
+        navigationOptions: { headerShown: false }
+    },
+    Chat: {
+        screen: Chat,
         navigationOptions: { headerShown: false }
     }
 
