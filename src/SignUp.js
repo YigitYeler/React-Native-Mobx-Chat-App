@@ -1,16 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, SafeAreaView, StyleSheet, Image, TextInput, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import MainStore from './Store/MainStore'
+import auth from '@react-native-firebase/auth'
+import { StackActions, NavigationActions } from 'react-navigation';
 
-
+const resetAction = StackActions.reset({
+    index: 0, // <-- currect active route from actions array
+    actions: [
+        NavigationActions.navigate({ routeName: 'Home' }),
+    ],
+});
 
 
 const SignUp = (props) => {
+    auth().onAuthStateChanged((user) => {
+        if (user) {
+            // User is signed in.
+            props.navigation.dispatch(resetAction);
+        } else {
+            // No user is signed in.
+            props.navigation.navigate('SignUp');
+        }
+    });
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
+
+    const signUpUser = () => {
+        MainStore.signUp(email, password, username, props)
+    }
+
     return (
         <SafeAreaView style={style.body}>
             <View style={style.header}>
-                <Text style={style.title}>Sign In</Text>
+                <Text style={style.title}>Sign Up</Text>
             </View>
             <View style={style.logo_area}>
                 <Image style={{ borderColor: '#6443D4', borderWidth: 5, borderRadius: 300, height: hp('17%'), width: wp('30%') }} source={require('../images/Ben.jpeg')}></Image>
@@ -25,6 +50,7 @@ const SignUp = (props) => {
                             placeholderTextColor={'#707070'}
                             placeholder={'Username'}
                             style={style.input}
+                            onChangeText={(text) => setUsername(text)}
                         />
                     </View>
                     <View style={style.item}>
@@ -32,6 +58,7 @@ const SignUp = (props) => {
                             placeholderTextColor={'#707070'}
                             placeholder={'Email'}
                             style={style.input}
+                            onChangeText={(text) => setEmail(text)}
                         />
 
                     </View>
@@ -41,12 +68,13 @@ const SignUp = (props) => {
                             placeholder={'Password'}
                             style={style.input}
                             secureTextEntry={true}
+                            onChangeText={(text) => setPassword(text)}
                         />
 
                     </View>
 
                     <View style={style.item}>
-                        <TouchableOpacity style={style.button} onPress={() => props.navigation.navigate('Home')}>
+                        <TouchableOpacity style={style.button} onPress={signUpUser}>
                             <Text style={style.button_text}>SignUp</Text>
                         </TouchableOpacity>
                     </View>

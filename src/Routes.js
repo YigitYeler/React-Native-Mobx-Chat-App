@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     SafeAreaView,
     StyleSheet,
@@ -26,55 +26,50 @@ import {
 
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
+import { NavigationContainer } from '@react-navigation/native'
+import auth from '@react-native-firebase/auth';
 
 //import Chat from './Chat';
 import Home from './Home';
 import Chat from './Chat';
 import Login from './Login';
-import SignUp from './SignUp'
+import SignUp from './SignUp';
 
 
-if (false) {
-
-    var MyApp = createStackNavigator({
-        Home: {
-            screen: Home,
-            navigationOptions: { headerShown: false }
-        },
-        Chat: {
-            screen: Chat,
-            navigationOptions: { headerShown: false }
-        }
 
 
-    })
 
-}
-else {
 
-    var MyApp = createStackNavigator({
-        SignUp: {
-            screen: SignUp,
-            navigationOptions: { headerShown: false }
-        },
-        Login: {
-            screen: Login,
-            navigationOptions: { headerShown: false }
-        },
-        Home: {
-            screen: Home,
-            navigationOptions: { headerShown: false }
-        },
-        Chat: {
-            screen: Chat,
-            navigationOptions: { headerShown: false }
-        }
 
-    })
 
-}
+var MyApp = createStackNavigator({
+    SignUp: {
+        screen: SignUp,
+        navigationOptions: { headerShown: false }
+    },
+    Login: {
+        screen: Login,
+        navigationOptions: { headerShown: false },
+    },
+    Home: {
+        screen: Home,
+        navigationOptions: { headerShown: false },
+    },
+    Chat: {
+        screen: Chat,
+        navigationOptions: { headerShown: false },
+    }
+
+
+})
+
+
+
+
+
 
 export default createAppContainer(MyApp);
+
 
 
 

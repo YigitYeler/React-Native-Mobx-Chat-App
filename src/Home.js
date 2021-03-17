@@ -2,10 +2,26 @@ import React from 'react'
 import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Image, Dimensions } from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import auth from '@react-native-firebase/auth';
+import { StackActions, NavigationActions } from 'react-navigation';
 
+const resetAction = StackActions.reset({
+    index: 0, // <-- currect active route from actions array
+    actions: [
+        NavigationActions.navigate({ routeName: 'SignUp' }),
+    ],
+});
 
 
 const Home = (props) => {
+    const signOut = () => {
+        auth().signOut().then(() => {
+            // Sign-out successful.
+            props.navigation.dispatch(resetAction);
+        }).catch((error) => {
+            // An error happened.
+        });
+    }
     return (
         <View style={[style.pageAll, { flexDirection: 'column', flex: 1 }]}>
             <View style={{ flex: 1 }}>
@@ -146,7 +162,7 @@ const Home = (props) => {
             </View>
             <View style={{ right: 0, bottom: 0, position: 'absolute', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: hp('15%'), width: wp('30%') }}>
                 <View style={style.icons}>
-                    <TouchableOpacity >
+                    <TouchableOpacity onPress={signOut}>
                         <Icon size={40} name={"comment-dots"} color='white' solid />
                     </TouchableOpacity>
                 </View>

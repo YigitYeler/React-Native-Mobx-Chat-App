@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, SafeAreaView, StyleSheet, Image, TextInput, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
+import MainStore from './Store/MainStore'
 
 
 
 const Login = (props) => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const signInUser = () => {
+        MainStore.signIn(email, password, props)
+    }
     return (
         <SafeAreaView style={style.body}>
             <View style={style.header}>
@@ -23,8 +29,9 @@ const Login = (props) => {
                     <View style={style.item}>
                         <TextInput
                             placeholderTextColor={'#707070'}
-                            placeholder={'Username'}
+                            placeholder={'Email'}
                             style={style.input}
+                            onChangeText={(text) => setEmail(text)}
                         />
                     </View>
                     <View style={style.item}>
@@ -32,12 +39,13 @@ const Login = (props) => {
                             placeholderTextColor={'#707070'}
                             placeholder={'Password'}
                             style={style.input}
+                            onChangeText={(text) => setPassword(text)}
                         />
 
                     </View>
 
                     <View style={style.item}>
-                        <TouchableOpacity style={style.button}>
+                        <TouchableOpacity style={style.button} onPress={signInUser}>
                             <Text style={style.button_text}>Login</Text>
                         </TouchableOpacity>
                     </View>
