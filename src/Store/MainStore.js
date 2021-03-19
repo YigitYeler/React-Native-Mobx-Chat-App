@@ -11,51 +11,57 @@ const resetAction = StackActions.reset({
 
 
 class MainStore {
-    @observable name = 'Yiğit'
-
-    @action getName() {
-        return this.name;
-    }
 
     @action signUp(email, password, username, props) {
-        auth()
-            .createUserWithEmailAndPassword(email, password)
-            .then(() => {
-                auth().signInWithEmailAndPassword(email, password)
-                    .then((firebaseUser) => {
-                        firebaseUser.user.updateProfile({
-                            displayName: username
+
+        if (email != "" && password != "" && username != "") {
+            auth()
+                .createUserWithEmailAndPassword(email, password)
+                .then(() => {
+                    auth().signInWithEmailAndPassword(email, password)
+                        .then((firebaseUser) => {
+                            firebaseUser.user.updateProfile({
+                                displayName: username
+                            })
+                            props.navigation.dispatch(resetAction);
+                            console.log(firebaseUser);
                         })
-                        props.navigation.dispatch(resetAction);
-                        console.log(firebaseUser);
-                    })
-                    .catch((error) => {
-                        // Error Handling
-                    });
-                console.log('User account created & signed in!');
-            })
-            .catch(error => {
-                if (error.code === 'auth/email-already-in-use') {
-                    console.log('That email address is already in use!');
-                }
+                        .catch((error) => {
+                            // Error Handling
+                        });
+                    console.log('User account created & signed in!');
+                })
+                .catch(error => {
+                    if (error.code === 'auth/email-already-in-use') {
+                        console.log('That email address is already in use!');
+                    }
 
-                if (error.code === 'auth/invalid-email') {
-                    console.log('That email address is invalid!');
-                }
+                    if (error.code === 'auth/invalid-email') {
+                        console.log('That email address is invalid!');
+                    }
 
-                console.error(error);
-            });
+                    console.error(error);
+                });
+        } else {
+            alert("Please do not leave blank space!")
+        }
+
     }
 
     @action signIn(email, password, props) {
-        auth().signInWithEmailAndPassword(email, password)
-            .then((firebaseUser) => {
-                props.navigation.dispatch(resetAction);
-                console.log(firebaseUser);
-            })
-            .catch((error) => {
-                console.log(error)
-            });
+
+        if (email != "" && password != "") {
+            auth().signInWithEmailAndPassword(email, password)
+                .then((firebaseUser) => {
+                    props.navigation.dispatch(resetAction);
+                    console.log(firebaseUser);
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+        } else {
+            alert("Please do not leave blank space!")
+        }
     }
 
 

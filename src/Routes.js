@@ -26,7 +26,7 @@ import {
 
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
-import { NavigationContainer } from '@react-navigation/native'
+import { createBottomTabNavigator } from 'react-navigation-tabs'
 import auth from '@react-native-firebase/auth';
 
 //import Chat from './Chat';
@@ -34,15 +34,19 @@ import Home from './Home';
 import Chat from './Chat';
 import Login from './Login';
 import SignUp from './SignUp';
+import CreateRoom from './CreateRoom';
+import JoinRoom from './JoinRoom';
 
+const CreateAndJoinBottom = createBottomTabNavigator({
+    CreateRoom: {
+        screen: CreateRoom
+    },
+    JoinRoom: {
+        screen: JoinRoom
+    }
+})
 
-
-
-
-
-
-
-var MyApp = createStackNavigator({
+const MyApp = createStackNavigator({
     SignUp: {
         screen: SignUp,
         navigationOptions: { headerShown: false }
@@ -58,6 +62,10 @@ var MyApp = createStackNavigator({
     Chat: {
         screen: Chat,
         navigationOptions: { headerShown: false },
+    },
+    CreateAndJoinBottom: {
+        screen: CreateAndJoinBottom,
+        navigationOptions: { headerShown: false }
     }
 
 

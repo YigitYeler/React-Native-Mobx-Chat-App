@@ -14,14 +14,14 @@ const resetAction = StackActions.reset({
 
 
 const Home = (props) => {
-    const signOut = () => {
+    /*const signOut = () => {
         auth().signOut().then(() => {
             // Sign-out successful.
             props.navigation.dispatch(resetAction);
         }).catch((error) => {
             // An error happened.
         });
-    }
+    }*/
     return (
         <View style={[style.pageAll, { flexDirection: 'column', flex: 1 }]}>
             <View style={{ flex: 1 }}>
@@ -162,7 +162,7 @@ const Home = (props) => {
             </View>
             <View style={{ right: 0, bottom: 0, position: 'absolute', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: hp('15%'), width: wp('30%') }}>
                 <View style={style.icons}>
-                    <TouchableOpacity onPress={signOut}>
+                    <TouchableOpacity onPress={() => props.navigation.navigate('CreateAndJoinBottom')}>
                         <Icon size={40} name={"comment-dots"} color='white' solid />
                     </TouchableOpacity>
                 </View>

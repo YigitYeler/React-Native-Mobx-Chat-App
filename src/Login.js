@@ -39,6 +39,7 @@ const Login = (props) => {
                             placeholderTextColor={'#707070'}
                             placeholder={'Password'}
                             style={style.input}
+                            secureTextEntry={true}
                             onChangeText={(text) => setPassword(text)}
                         />
 
