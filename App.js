@@ -24,11 +24,14 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import { NavigationContainer } from '@react-navigation/native';
 import Routes from './src/Routes'
 
 const App = () => {
   return (
+
     <Routes />
+
   );
 };
 

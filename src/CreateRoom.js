@@ -3,12 +3,13 @@ import { View, Text, SafeAreaView, StyleSheet, Image, TextInput, TouchableOpacit
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MainStore from './Store/MainStore'
-
-
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 
 const CreateRoom = (props) => {
 
     return (
+
         <SafeAreaView style={style.body}>
             <View style={style.header}>
                 <Text style={style.title}>Create Chat Room</Text>
@@ -39,6 +40,7 @@ const CreateRoom = (props) => {
             </View>
 
         </SafeAreaView >
+
     )
 }
 

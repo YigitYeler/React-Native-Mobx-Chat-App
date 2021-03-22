@@ -37,14 +37,25 @@ import SignUp from './SignUp';
 import CreateRoom from './CreateRoom';
 import JoinRoom from './JoinRoom';
 
-const CreateAndJoinBottom = createBottomTabNavigator({
-    CreateRoom: {
-        screen: CreateRoom
+const CreateAndJoinBottom = createBottomTabNavigator(
+    {
+        CreateRoom: { screen: CreateRoom },
+
+        JoinRoom: {
+            screen: JoinRoom
+        }
     },
-    JoinRoom: {
-        screen: JoinRoom
+
+    {
+        tabBarOptions: {
+            activeTintColor: 'white',
+            inactiveTintColor: 'white',
+            activeBackgroundColor: '#6443D4',
+            inactiveBackgroundColor: '#131214'
+        }
     }
-})
+
+)
 
 const MyApp = createStackNavigator({
     SignUp: {

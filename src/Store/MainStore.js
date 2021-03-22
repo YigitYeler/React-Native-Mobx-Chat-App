@@ -1,6 +1,7 @@
 import { observable, action } from 'mobx';
 import auth from '@react-native-firebase/auth';
 import { StackActions, NavigationActions } from 'react-navigation';
+import database from '@react-native-firebase/database';
 
 const resetAction = StackActions.reset({
     index: 0, // <-- currect active route from actions array
@@ -18,6 +19,7 @@ class MainStore {
             auth()
                 .createUserWithEmailAndPassword(email, password)
                 .then(() => {
+                    //sdsdf
                     auth().signInWithEmailAndPassword(email, password)
                         .then((firebaseUser) => {
                             firebaseUser.user.updateProfile({
@@ -25,6 +27,12 @@ class MainStore {
                             })
                             props.navigation.dispatch(resetAction);
                             console.log(firebaseUser);
+
+                            database()
+                                .ref('Users')
+                                .push({
+                                    UserName: username
+                                });
                         })
                         .catch((error) => {
                             // Error Handling
@@ -63,6 +71,7 @@ class MainStore {
             alert("Please do not leave blank space!")
         }
     }
+
 
 
 }
