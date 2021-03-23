@@ -8,6 +8,10 @@ import MainStore from './Store/MainStore'
 
 const JoinRoom = (props) => {
 
+    const [roomId, joinRoomId] = useState("");
+    const joinRoomById = () => {
+        MainStore.joinRoomById(roomId);
+    }
     return (
         <SafeAreaView style={style.body}>
             <View style={style.header}>
@@ -26,12 +30,13 @@ const JoinRoom = (props) => {
                             placeholderTextColor={'#707070'}
                             placeholder={'RoomID'}
                             style={style.input}
+                            onChangeText={(text) => joinRoomId("-MWUSoxwKGUsBAEVRLil")}
                         />
                     </View>
 
 
                     <View style={style.item}>
-                        <TouchableOpacity style={style.button}>
+                        <TouchableOpacity style={style.button} onPress={joinRoomById}>
                             <Text style={style.button_text}>Join Room</Text>
                         </TouchableOpacity>
                     </View>

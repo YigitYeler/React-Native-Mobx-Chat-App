@@ -13,6 +13,7 @@ const resetAction = StackActions.reset({
 
 class MainStore {
 
+
     @action signUp(email, password, username, props) {
 
         if (email != "" && password != "" && username != "") {
@@ -25,31 +26,38 @@ class MainStore {
                             firebaseUser.user.updateProfile({
                                 displayName: username
                             })
-                            props.navigation.dispatch(resetAction);
+
                             console.log(firebaseUser);
 
                             database()
                                 .ref('Users')
                                 .push({
-                                    UserName: username
+                                    UserName: username,
+                                    UserID: firebaseUser.user.uid
                                 });
+
+                            props.navigation.dispatch(resetAction);
+
                         })
                         .catch((error) => {
                             // Error Handling
+                            console.log(error);
                         });
                     console.log('User account created & signed in!');
                 })
                 .catch(error => {
                     if (error.code === 'auth/email-already-in-use') {
-                        console.log('That email address is already in use!');
+                        alert('That email address is already in use!');
                     }
 
                     if (error.code === 'auth/invalid-email') {
-                        console.log('That email address is invalid!');
+                        alert('That email address is invalid!');
                     }
 
                     console.error(error);
                 });
+
+
         } else {
             alert("Please do not leave blank space!")
         }
@@ -60,9 +68,8 @@ class MainStore {
 
         if (email != "" && password != "") {
             auth().signInWithEmailAndPassword(email, password)
-                .then((firebaseUser) => {
+                .then(() => {
                     props.navigation.dispatch(resetAction);
-                    console.log(firebaseUser);
                 })
                 .catch((error) => {
                     console.log(error)
@@ -72,8 +79,96 @@ class MainStore {
         }
     }
 
+    @action createMyRoom(roomName) {
+
+        auth().onAuthStateChanged((user) => {
+            if (user) {
+                database()
+                    .ref('Rooms')
+                    .push({
+                        RoomName: roomName,
+                        Users: {
+                            userIdArray: [user.uid]
+                        }
+
+                    });
+            } else {
+                // No user is signed in.
+            }
+        });
+
+    }
+
+    @action joinRoomById(roomId) {
+        var userIdArray = [];
+        var isEntry = false;
+        auth().onAuthStateChanged((user) => {
+            if (user) {
+                var userid = user.uid;
+                userIdArray.push(userid);
+                if (roomId.length == 20) {
+                    database().ref("Rooms").child(roomId).orderByKey()
+                        .once("value", (snapshot) => {
+                            console.log(snapshot.key)
+
+                            if (snapshot.val().Users.userIdArray != null) {
+                                for (var i = 0; i < snapshot.val().Users.userIdArray.length; i++) {
+                                    userIdArray.push(snapshot.val().Users.userIdArray[i])
+                                    if (snapshot.val().Users.userIdArray[i] == userid) {
+                                        isEntry = true
+                                    }
+
+                                }
+                                console.log(userIdArray)
+                            }
+
+                            if (isEntry == false) {
+
+                                database()
+                                    .ref('Rooms').child(roomId).child("Users")
+                                    .set({
+                                        userIdArray
+                                    });
+                            }
+                            else if (isEntry) {
+                                alert("You have been already in this room")
+                            }
+
+                            if (roomId != snapshot.key) {
+                                alert("Wrong RoomID")
+                            }
 
 
+                            snapshot.forEach((key) => {
+                                // console.log(key.key)
+
+                                //console.log(userids)
+
+
+
+
+
+
+                            })
+                        });
+                } else {
+                    alert("Wrong RoomID")
+                }
+
+                /*database()
+                    .ref('Rooms')
+                    .push({
+                        RoomName: roomName,
+                        Users: {
+                            User: user.uid
+                        }
+                    });*/
+
+            } else {
+                // No user is signed in.
+            }
+        });
+    }
 }
 
 export default new MainStore();

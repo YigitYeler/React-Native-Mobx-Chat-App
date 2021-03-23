@@ -8,6 +8,11 @@ import { NavigationContainer } from '@react-navigation/native';
 
 const CreateRoom = (props) => {
 
+    const [roomName, setRoomName] = useState("");
+
+    const createMyRoom = () => {
+        MainStore.createMyRoom(roomName);
+    }
     return (
 
         <SafeAreaView style={style.body}>
@@ -27,12 +32,13 @@ const CreateRoom = (props) => {
                             placeholderTextColor={'#707070'}
                             placeholder={'Room Name'}
                             style={style.input}
+                            onChangeText={(text) => setRoomName(text)}
                         />
                     </View>
 
 
                     <View style={style.item}>
-                        <TouchableOpacity style={style.button}>
+                        <TouchableOpacity style={style.button} onPress={createMyRoom}>
                             <Text style={style.button_text}>Create Room</Text>
                         </TouchableOpacity>
                     </View>
