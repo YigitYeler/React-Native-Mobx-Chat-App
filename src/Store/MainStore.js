@@ -112,12 +112,12 @@ class MainStore {
                             console.log(snapshot.key)
 
                             if (snapshot.val().Users.userIdArray != null) {
+
                                 for (var i = 0; i < snapshot.val().Users.userIdArray.length; i++) {
                                     userIdArray.push(snapshot.val().Users.userIdArray[i])
                                     if (snapshot.val().Users.userIdArray[i] == userid) {
                                         isEntry = true
                                     }
-
                                 }
                                 console.log(userIdArray)
                             }
@@ -138,18 +138,6 @@ class MainStore {
                                 alert("Wrong RoomID")
                             }
 
-
-                            snapshot.forEach((key) => {
-                                // console.log(key.key)
-
-                                //console.log(userids)
-
-
-
-
-
-
-                            })
                         });
                 } else {
                     alert("Wrong RoomID")
