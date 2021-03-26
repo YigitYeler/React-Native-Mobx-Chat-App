@@ -36,18 +36,22 @@ const Home = (props) => {
                 database().ref("Rooms").on("value", (snapshot) => {
 
                     setUserIds(snapshot.val());
-                    /*snapshot.forEach((room) => {
+                    snapshot.forEach((room) => {
+                        var tempArray = [];
+                        tempArray.push(room.val().Users.userIdArray);
 
-                        useridsState.push(room.val().Users.userIdArray);
+                        setUserIds(tempArray);
 
-
-                    })*/
+                    })
+                    for (var i = 0; i < useridsState.lenght; i++) {
+                        console.log(useridsState[i])
+                    }
 
                 })
 
             }
         })
-        console.log(useridsState[0])
+        // console.log(useridsState[0])
 
 
 
@@ -65,7 +69,7 @@ const Home = (props) => {
         })*/
 
 
-    })
+    }, [])
     return (
 
         <View style={[style.pageAll, { flexDirection: 'column', flex: 1 }]}>

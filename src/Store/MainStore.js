@@ -81,9 +81,25 @@ class MainStore {
 
     @action createMyRoom(roomName) {
 
+
         auth().onAuthStateChanged((user) => {
+            var userid = user.uid
             if (user) {
-                database()
+                database().ref("Users").orderByKey()
+                    .once('value', snapshot => {
+                        snapshot.forEach((dbUsers) => {
+                            console.log(dbUsers.key)
+                            if (dbUsers.val().UserID == user.uid) {
+                                database()
+                                    .ref('Users').child(dbUsers.key).child('MyRooms')
+                                    .push({
+                                        MyRoomsArray: [userid]
+                                    });
+                            }
+                        })
+                    })
+
+                /*database()
                     .ref('Rooms')
                     .push({
                         RoomName: roomName,
@@ -91,7 +107,7 @@ class MainStore {
                             userIdArray: [user.uid]
                         }
 
-                    });
+                    });*/
             } else {
                 // No user is signed in.
             }
@@ -100,6 +116,7 @@ class MainStore {
     }
 
     @action joinRoomById(roomId) {
+
         var userIdArray = [];
         var isEntry = false;
         auth().onAuthStateChanged((user) => {
