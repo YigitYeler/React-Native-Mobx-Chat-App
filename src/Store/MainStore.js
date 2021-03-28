@@ -85,21 +85,21 @@ class MainStore {
         auth().onAuthStateChanged((user) => {
             var userid = user.uid
             if (user) {
-                database().ref("Users").orderByKey()
-                    .once('value', snapshot => {
-                        snapshot.forEach((dbUsers) => {
-                            console.log(dbUsers.key)
-                            if (dbUsers.val().UserID == user.uid) {
-                                database()
-                                    .ref('Users').child(dbUsers.key).child('MyRooms')
-                                    .push({
-                                        MyRoomsArray: [userid]
-                                    });
-                            }
-                        })
-                    })
+                /* database().ref("Users").orderByKey()
+                     .once('value', snapshot => {
+                         snapshot.forEach((dbUsers) => {
+                             console.log(dbUsers.key)
+                             if (dbUsers.val().UserID == user.uid) {
+                                 database()
+                                     .ref('Users').child(dbUsers.key).child('MyRooms')
+                                     .push({
+                                         MyRoomsArray: [userid]
+                                     });
+                             }
+                         })
+                     })*/
 
-                /*database()
+                database()
                     .ref('Rooms')
                     .push({
                         RoomName: roomName,
@@ -107,7 +107,7 @@ class MainStore {
                             userIdArray: [user.uid]
                         }
 
-                    });*/
+                    });
             } else {
                 // No user is signed in.
             }
@@ -173,6 +173,19 @@ class MainStore {
                 // No user is signed in.
             }
         });
+    }
+
+    @action filterRoomArray(myRoomsArray) {
+        for (var i = 0; i < myRoomsArray.length; i++) {
+
+            for (var j = 0; j < myRoomsArray.length; j++) {
+                if (i != j && myRoomsArray[i].roomId == myRoomsArray[j].roomId) {
+                    return false;
+                    break;
+                }
+            }
+        }
+        return true;
     }
 }
 

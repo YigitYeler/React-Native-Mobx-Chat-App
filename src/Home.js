@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import auth from '@react-native-firebase/auth';
 import { StackActions, NavigationActions } from 'react-navigation';
 import database from '@react-native-firebase/database';
+import MainStore from './Store/MainStore';
 
 const resetAction = StackActions.reset({
     index: 0, // <-- currect active route from actions array
@@ -27,49 +28,66 @@ const Home = (props) => {
             // An error happened.
         });
     }*/
-    useEffect(() => {
 
+
+
+
+
+    useEffect(() => {
         auth().onAuthStateChanged((user) => {
             var userid = user.uid;
             if (user) {
                 database().ref("Rooms").off();
-                database().ref("Rooms").on("value", (snapshot) => {
+                database().ref("Rooms").on("child_added", (snapshot) => {
 
-                    setUserIds(snapshot.val());
-                    snapshot.forEach((room) => {
-                        var tempArray = [];
-                        tempArray.push(room.val().Users.userIdArray);
+                    //console.log(snapshot.key);
 
-                        setUserIds(tempArray);
+                    //console.log(room.key)
+                    for (var i = 0; i < snapshot.val().Users.userIdArray.length; i++) {
+                        //console.log(room.val().Users.userIdArray[i])
 
-                    })
-                    for (var i = 0; i < useridsState.lenght; i++) {
-                        console.log(useridsState[i])
+                        if (userid == snapshot.val().Users.userIdArray[i]) {
+                            database().ref("Rooms").child(snapshot.key).orderByKey().on('value', snapshot => {
+
+                                let myRoomsDb = {
+                                    roomId: snapshot.key,
+                                    roomName: snapshot.val().RoomName
+                                }
+                                var myRoomsArray = myRooms;
+                                if (MainStore.filterRoomArray(myRooms)) {
+                                    myRoomsArray.push(myRoomsDb);
+                                    getMyRooms(myRoomsArray)
+                                }
+                            })
+                        }
                     }
-
+                    myRooms.pop();
                 })
-
             }
         })
-        // console.log(useridsState[0])
+    })
+
+
+
+    // console.log(useridsState[0])
 
 
 
 
-        /*database().ref("Rooms").orderByKey().on('value', snapshot => {
+    /*database().ref("Rooms").orderByKey().on('value', snapshot => {
+    
+        let myRoomsDb = {
+            roomId: snapshot.key,
+            roomName: snapshot.val().RoomName
+        }
+        var myRoomsArray = myRooms;
+        myRoomsArray.push(myRoomsDb);
+        getMyRooms(myRoomsArray)
+    
+    })*/
 
-            let myRoomsDb = {
-                roomId: snapshot.key,
-                roomName: snapshot.val().RoomName
-            }
-            var myRoomsArray = myRooms;
-            myRoomsArray.push(myRoomsDb);
-            getMyRooms(myRoomsArray)
-
-        })*/
 
 
-    }, [])
     return (
 
         <View style={[style.pageAll, { flexDirection: 'column', flex: 1 }]}>
