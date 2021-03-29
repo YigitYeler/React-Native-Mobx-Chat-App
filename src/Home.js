@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallBack } from 'react'
 import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Image, Dimensions } from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -6,6 +6,7 @@ import auth from '@react-native-firebase/auth';
 import { StackActions, NavigationActions } from 'react-navigation';
 import database from '@react-native-firebase/database';
 import MainStore from './Store/MainStore';
+
 
 const resetAction = StackActions.reset({
     index: 0, // <-- currect active route from actions array
@@ -29,11 +30,7 @@ const Home = (props) => {
         });
     }*/
 
-
-
-
-
-    useEffect(() => {
+    const myLifeCycle = () => {
         auth().onAuthStateChanged((user) => {
             var userid = user.uid;
             if (user) {
@@ -65,7 +62,24 @@ const Home = (props) => {
                 })
             }
         })
-    })
+    }
+
+
+
+    useEffect(() => {
+
+
+        myLifeCycle();
+
+
+
+    }, [])
+
+
+
+
+
+
 
 
 
