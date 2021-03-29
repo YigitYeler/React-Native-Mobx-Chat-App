@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallBack } from 'react'
+import React, { useEffect, useState, useCallBack, useLayoutEffect } from 'react'
 import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Image, Dimensions } from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -19,7 +19,6 @@ const resetAction = StackActions.reset({
 const Home = (props) => {
 
     const [myRooms, getMyRooms] = useState([]);
-    const [useridsState, setUserIds] = useState([])
 
     /*const signOut = () => {
         auth().signOut().then(() => {
@@ -30,54 +29,48 @@ const Home = (props) => {
         });
     }*/
 
-    const myLifeCycle = () => {
-        auth().onAuthStateChanged((user) => {
-            var userid = user.uid;
-            if (user) {
-                database().ref("Rooms").off();
-                database().ref("Rooms").on("child_added", (snapshot) => {
-
-                    //console.log(snapshot.key);
-
-                    //console.log(room.key)
-                    for (var i = 0; i < snapshot.val().Users.userIdArray.length; i++) {
-                        //console.log(room.val().Users.userIdArray[i])
-
-                        if (userid == snapshot.val().Users.userIdArray[i]) {
-                            database().ref("Rooms").child(snapshot.key).orderByKey().on('value', snapshot => {
-
-                                let myRoomsDb = {
-                                    roomId: snapshot.key,
-                                    roomName: snapshot.val().RoomName
-                                }
-                                var myRoomsArray = myRooms;
-                                if (MainStore.filterRoomArray(myRooms)) {
-                                    myRoomsArray.push(myRoomsDb);
-                                    getMyRooms(myRoomsArray)
-                                }
-                            })
-                        }
-                    }
-                    myRooms.pop();
-                })
-            }
-        })
-    }
 
 
+
+    // Remove the listener when you are done
 
     useEffect(() => {
 
 
-        myLifeCycle();
+        auth().onAuthStateChanged((user) => {
+            var userid = user.uid;
+
+            database().ref("Rooms").orderByKey().on("child_added", (snapshot) => {
+                //console.log(snapshot.key);
+
+                //console.log(room.key)
+                for (var i = 0; i < snapshot.val().Users.userIdArray.length; i++) {
+                    //console.log(room.val().Users.userIdArray[i])
+
+                    if (userid == snapshot.val().Users.userIdArray[i]) {
+                        database().ref("Rooms").child(snapshot.key).orderByKey().on('value', snapshot => {
+
+                            let myRoomsDb = {
+                                roomId: snapshot.key,
+                                roomName: snapshot.val().RoomName
+                            }
+                            var myRoomsArray = myRooms;
+                            if (MainStore.filterRoomArray(myRooms)) {
+                                myRoomsArray.push(myRoomsDb);
+                                getMyRooms(myRoomsArray)
+                            }
+                        })
+                    }
+                }
+                myRooms.pop();
+            })
+
+        })
+
 
 
 
     }, [])
-
-
-
-
 
 
 
@@ -141,26 +134,30 @@ const Home = (props) => {
                 <ScrollView >
 
                     <View style={style.cards} >
-                        {myRooms.map((room) => {
-                            return (
-                                <TouchableOpacity key={room.roomId} onPress={() => props.navigation.navigate('Chat')}>
-                                    <View style={style.card} >
-                                        <View style={style.inCard}>
-                                            <Image style={style.inCardImage} source={require('../images/Ben.jpeg')} />
-                                            <View style={style.inCardRoomName}>
-                                                <Text style={{ color: '#CECECE', fontSize: hp('2.5%') }}>{room.roomName}</Text>
-                                                <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>Hello</Text>
-                                            </View>
+                        {
+                            myRooms.map((room) => {
 
-                                            <View style={style.inCardDate}>
-                                                <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>10.11.2021</Text>
-                                            </View>
+                                return (
+                                    <TouchableOpacity key={room.roomId} onPress={() => props.navigation.navigate('Chat')}>
+                                        <View style={style.card} >
+                                            <View style={style.inCard}>
+                                                <Image style={style.inCardImage} source={require('../images/Ben.jpeg')} />
+                                                <View style={style.inCardRoomName}>
+                                                    <Text style={{ color: '#CECECE', fontSize: hp('2.5%') }}>{room.roomName}</Text>
+                                                    <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>Hello</Text>
+                                                </View>
 
+                                                <View style={style.inCardDate}>
+                                                    <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>10.11.2021</Text>
+                                                </View>
+
+                                            </View>
                                         </View>
-                                    </View>
-                                </TouchableOpacity>
-                            )
-                        })}
+                                    </TouchableOpacity>
+                                )
+
+                            })
+                        }
 
                     </View>
                 </ScrollView>
