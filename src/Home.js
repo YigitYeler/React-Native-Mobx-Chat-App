@@ -19,6 +19,7 @@ const resetAction = StackActions.reset({
 const Home = (props) => {
 
     const [myRooms, getMyRooms] = useState([]);
+    const [change, getChange] = useState(1);
 
     /*const signOut = () => {
         auth().signOut().then(() => {
@@ -30,17 +31,11 @@ const Home = (props) => {
     }*/
 
 
-
-
-    // Remove the listener when you are done
-
-    useEffect(() => {
-
-
+    const changeFunc = async () => {
         auth().onAuthStateChanged((user) => {
             var userid = user.uid;
 
-            database().ref("Rooms").orderByKey().on("child_added", (snapshot) => {
+            database().ref("Rooms").orderByKey().on('child_added', (snapshot) => {
                 //console.log(snapshot.key);
 
                 //console.log(room.key)
@@ -55,8 +50,8 @@ const Home = (props) => {
                                 roomName: snapshot.val().RoomName
                             }
                             var myRoomsArray = myRooms;
+                            myRoomsArray.push(myRoomsDb);
                             if (MainStore.filterRoomArray(myRooms)) {
-                                myRoomsArray.push(myRoomsDb);
                                 getMyRooms(myRoomsArray)
                             }
                         })
@@ -68,9 +63,16 @@ const Home = (props) => {
         })
 
 
+    }
 
 
-    }, [])
+    // Remove the listener when you are done
+
+    useEffect(() => {
+
+        changeFunc()
+
+    }, [changeFunc])
 
 
 
@@ -135,6 +137,7 @@ const Home = (props) => {
 
                     <View style={style.cards} >
                         {
+
                             myRooms.map((room) => {
 
                                 return (
