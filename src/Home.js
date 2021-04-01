@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallBack, useLayoutEffect } from 'react'
+import React, { useEffect, useState, useCallBack, useLayoutEffect, useContext } from 'react'
 import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Image, Dimensions } from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -6,6 +6,7 @@ import auth from '@react-native-firebase/auth';
 import { StackActions, NavigationActions } from 'react-navigation';
 import database from '@react-native-firebase/database';
 import MainStore from './Store/MainStore';
+import useFirebaseAuthentication from './dosa'
 
 
 const resetAction = StackActions.reset({
@@ -17,8 +18,10 @@ const resetAction = StackActions.reset({
 
 
 const Home = (props) => {
+    const authUser = useFirebaseAuthentication();
 
     const [myRooms, getMyRooms] = useState([]);
+    const [userId, setUserId] = useState();
 
     /*const signOut = () => {
         auth().signOut().then(() => {
@@ -30,12 +33,17 @@ const Home = (props) => {
     }*/
 
 
+
+
+
+
+
     // Remove the listener when you are done
 
     useEffect(() => {
 
-        auth().onAuthStateChanged((user) => {
-            var userid = user.uid;
+        auth().onAuthStateChanged(async (user) => {
+            setUserId(user.uid);
 
             database().ref("Rooms").orderByKey().on('child_added', (snapshot) => {
                 //console.log(snapshot.key);
@@ -44,7 +52,7 @@ const Home = (props) => {
                 for (var i = 0; i < snapshot.val().Users.userIdArray.length; i++) {
                     //console.log(room.val().Users.userIdArray[i])
 
-                    if (userid == snapshot.val().Users.userIdArray[i]) {
+                    if (userId == snapshot.val().Users.userIdArray[i]) {
                         database().ref("Rooms").child(snapshot.key).orderByKey().on('value', snapshot => {
 
                             let myRoomsDb = {
@@ -52,14 +60,19 @@ const Home = (props) => {
                                 roomName: snapshot.val().RoomName
                             }
                             var myRoomsArray = myRooms;
-                            myRoomsArray.push(myRoomsDb);
+
                             if (MainStore.filterRoomArray(myRooms)) {
+                                myRoomsArray.push(myRoomsDb);
                                 getMyRooms(myRoomsArray)
                             }
                         })
                     }
+
+
                 }
                 myRooms.pop();
+
+
             })
 
         })
