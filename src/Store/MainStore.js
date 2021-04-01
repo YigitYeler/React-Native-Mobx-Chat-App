@@ -3,15 +3,20 @@ import auth from '@react-native-firebase/auth';
 import { StackActions, NavigationActions } from 'react-navigation';
 import database from '@react-native-firebase/database';
 
+
 const resetAction = StackActions.reset({
     index: 0, // <-- currect active route from actions array
     actions: [
-        NavigationActions.navigate({ routeName: 'Home' }),
+        NavigationActions.navigate({
+            routeName: 'Home'
+        }),
     ],
 });
 
 
 class MainStore {
+
+
 
 
     @action signUp(email, password, username, props) {
@@ -66,9 +71,14 @@ class MainStore {
 
     @action signIn(email, password, props) {
 
+
+
         if (email != "" && password != "") {
             auth().signInWithEmailAndPassword(email, password)
                 .then(() => {
+
+
+
                     props.navigation.dispatch(resetAction);
                 })
                 .catch((error) => {

@@ -19,7 +19,6 @@ const resetAction = StackActions.reset({
 const Home = (props) => {
 
     const [myRooms, getMyRooms] = useState([]);
-    const [change, getChange] = useState(1);
 
     /*const signOut = () => {
         auth().signOut().then(() => {
@@ -31,7 +30,10 @@ const Home = (props) => {
     }*/
 
 
-    const changeFunc = async () => {
+    // Remove the listener when you are done
+
+    useEffect(() => {
+
         auth().onAuthStateChanged((user) => {
             var userid = user.uid;
 
@@ -62,19 +64,7 @@ const Home = (props) => {
 
         })
 
-
-    }
-
-
-    // Remove the listener when you are done
-
-    useEffect(() => {
-
-        changeFunc()
-
-    }, [changeFunc])
-
-
+    }, [])
 
 
 
@@ -149,7 +139,6 @@ const Home = (props) => {
                                                     <Text style={{ color: '#CECECE', fontSize: hp('2.5%') }}>{room.roomName}</Text>
                                                     <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>Hello</Text>
                                                 </View>
-
                                                 <View style={style.inCardDate}>
                                                     <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>10.11.2021</Text>
                                                 </View>
