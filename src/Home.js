@@ -29,18 +29,16 @@ const Home = (props) => {
             props.navigation.dispatch(resetAction);
         }).catch((error) => {
             // An error happened.
+
         });
     }*/
-
-
-
-
 
 
 
     // Remove the listener when you are done
 
     useEffect(() => {
+
 
         auth().onAuthStateChanged(async (user) => {
             setUserId(user.uid);
@@ -67,17 +65,15 @@ const Home = (props) => {
                             }
                         })
                     }
-
-
                 }
                 myRooms.pop();
-
 
             })
 
         })
 
-    }, [])
+
+    }, [myRooms])
 
 
 
@@ -139,29 +135,26 @@ const Home = (props) => {
                 <ScrollView >
 
                     <View style={style.cards} >
-                        {
-
-                            myRooms.map((room) => {
-
-                                return (
-                                    <TouchableOpacity key={room.roomId} onPress={() => props.navigation.navigate('Chat')}>
-                                        <View style={style.card} >
-                                            <View style={style.inCard}>
-                                                <Image style={style.inCardImage} source={require('../images/Ben.jpeg')} />
-                                                <View style={style.inCardRoomName}>
-                                                    <Text style={{ color: '#CECECE', fontSize: hp('2.5%') }}>{room.roomName}</Text>
-                                                    <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>Hello</Text>
-                                                </View>
-                                                <View style={style.inCardDate}>
-                                                    <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>10.11.2021</Text>
-                                                </View>
-
+                        {myRooms.map((room) => {
+                            return (
+                                <TouchableOpacity key={room.roomId} onPress={() => props.navigation.navigate('Chat')}>
+                                    <View style={style.card} >
+                                        <View style={style.inCard}>
+                                            <Image style={style.inCardImage} source={require('../images/Ben.jpeg')} />
+                                            <View style={style.inCardRoomName}>
+                                                <Text style={{ color: '#CECECE', fontSize: hp('2.5%') }}>{room.roomName}</Text>
+                                                <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>Hello</Text>
                                             </View>
-                                        </View>
-                                    </TouchableOpacity>
-                                )
+                                            <View style={style.inCardDate}>
+                                                <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>10.11.2021</Text>
+                                            </View>
 
-                            })
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            )
+
+                        })
                         }
 
                     </View>
@@ -175,7 +168,7 @@ const Home = (props) => {
                 </View>
             </View>
 
-        </View>
+        </View >
     )
 }
 

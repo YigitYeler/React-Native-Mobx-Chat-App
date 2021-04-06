@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, SafeAreaView, StyleSheet, Image, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, SafeAreaView, StyleSheet, Image, TextInput, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MainStore from './Store/MainStore'
@@ -33,7 +33,7 @@ const SignUp = (props) => {
     }
 
     return (
-        <SafeAreaView style={style.body}>
+        <ScrollView style={style.body}>
             <View style={style.header}>
                 <Text style={style.title}>Sign Up</Text>
             </View>
@@ -105,7 +105,7 @@ const SignUp = (props) => {
             </View>
 
 
-        </SafeAreaView >
+        </ScrollView >
     )
 }
 
