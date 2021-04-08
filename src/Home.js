@@ -6,7 +6,7 @@ import auth from '@react-native-firebase/auth';
 import { StackActions, NavigationActions } from 'react-navigation';
 import database from '@react-native-firebase/database';
 import MainStore from './Store/MainStore';
-import useFirebaseAuthentication from './dosa'
+import { BallIndicator } from 'react-native-indicators'
 
 
 const resetAction = StackActions.reset({
@@ -18,10 +18,10 @@ const resetAction = StackActions.reset({
 
 
 const Home = (props) => {
-    const authUser = useFirebaseAuthentication();
 
     const [myRooms, getMyRooms] = useState([]);
     const [userId, setUserId] = useState();
+    const [wait, setWait] = useState(false);
 
     /*const signOut = () => {
         auth().signOut().then(() => {
@@ -33,54 +33,54 @@ const Home = (props) => {
         });
     }*/
 
-
-
-    // Remove the listener when you are done
+    props.navigation.addListener("willFocus", () => {
+        listenForChange();
+        setWait(false)
+    })
 
     useEffect(() => {
+        listenForChange();
+        setTimeout(() => {
+            setWait(true)
+        }, 1000)
+    })
 
+    const listenForChange = () => {
 
-        auth().onAuthStateChanged(async (user) => {
-            setUserId(user.uid);
+        auth().onAuthStateChanged((user) => {
+            if (user) {
+                setUserId(user.uid);
 
-            database().ref("Rooms").orderByKey().on('child_added', (snapshot) => {
-                //console.log(snapshot.key);
+                database().ref("Rooms").orderByKey().on('child_added', (snapshot) => {
+                    //console.log(snapshot.key);
 
-                //console.log(room.key)
-                for (var i = 0; i < snapshot.val().Users.userIdArray.length; i++) {
-                    //console.log(room.val().Users.userIdArray[i])
+                    //console.log(room.key)
+                    for (var i = 0; i < snapshot.val().Users.userIdArray.length; i++) {
+                        //console.log(room.val().Users.userIdArray[i])
 
-                    if (userId == snapshot.val().Users.userIdArray[i]) {
-                        database().ref("Rooms").child(snapshot.key).orderByKey().on('value', snapshot => {
+                        if (userId == snapshot.val().Users.userIdArray[i]) {
+                            database().ref("Rooms").child(snapshot.key).orderByKey().on('value', snapshot => {
 
-                            let myRoomsDb = {
-                                roomId: snapshot.key,
-                                roomName: snapshot.val().RoomName
-                            }
-                            var myRoomsArray = myRooms;
-
-                            if (MainStore.filterRoomArray(myRooms)) {
+                                let myRoomsDb = {
+                                    roomId: snapshot.key,
+                                    roomName: snapshot.val().RoomName
+                                }
+                                var myRoomsArray = myRooms;
                                 myRoomsArray.push(myRoomsDb);
-                                getMyRooms(myRoomsArray)
-                            }
-                        })
+                                if (MainStore.filterRoomArray(myRoomsArray)) {
+                                    getMyRooms(myRoomsArray)
+                                }
+                                else {
+                                    myRoomsArray.pop();
+                                }
+                            })
+                        }
                     }
-                }
-                myRooms.pop();
 
-            })
-
+                })
+            }
         })
-
-
-    }, [myRooms])
-
-
-
-    // console.log(useridsState[0])
-
-
-
+    }
 
     /*database().ref("Rooms").orderByKey().on('value', snapshot => {
     
@@ -94,12 +94,10 @@ const Home = (props) => {
     
     })*/
 
-
-
     return (
 
         <View style={[style.pageAll, { flexDirection: 'column', flex: 1 }]}>
-            <View style={{ flex: 1 }}>
+            {/*<View style={{ flex: 1 }}>
                 <ScrollView
                     style={style.headerUsers}
                     horizontal
@@ -130,31 +128,34 @@ const Home = (props) => {
                     </View>
 
                 </ScrollView>
-            </View>
+            </View>*/}
             <View style={{ flex: 4 }}>
                 <ScrollView >
 
                     <View style={style.cards} >
-                        {myRooms.map((room) => {
-                            return (
-                                <TouchableOpacity key={room.roomId} onPress={() => props.navigation.navigate('Chat')}>
-                                    <View style={style.card} >
-                                        <View style={style.inCard}>
-                                            <Image style={style.inCardImage} source={require('../images/Ben.jpeg')} />
-                                            <View style={style.inCardRoomName}>
-                                                <Text style={{ color: '#CECECE', fontSize: hp('2.5%') }}>{room.roomName}</Text>
-                                                <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>Hello</Text>
-                                            </View>
-                                            <View style={style.inCardDate}>
-                                                <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>10.11.2021</Text>
-                                            </View>
+                        {
+                            wait ? myRooms.map((room) => {
+                                return (
+                                    <TouchableOpacity key={room.roomId} onPress={() => props.navigation.navigate('Chat')}>
+                                        <View style={style.card} >
+                                            <View style={style.inCard}>
+                                                <Image style={style.inCardImage} source={require('../images/Ben.jpeg')} />
+                                                <View style={style.inCardRoomName}>
+                                                    <Text style={{ color: '#CECECE', fontSize: hp('2.5%') }}>{room.roomName}</Text>
+                                                    <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>Hello</Text>
+                                                </View>
+                                                <View style={style.inCardDate}>
+                                                    <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>10.11.2021</Text>
+                                                </View>
 
+                                            </View>
                                         </View>
-                                    </View>
-                                </TouchableOpacity>
-                            )
+                                    </TouchableOpacity>
+                                )
 
-                        })
+                            })
+                                :
+                                <BallIndicator color={"white"} />
                         }
 
                     </View>

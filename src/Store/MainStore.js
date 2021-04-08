@@ -190,8 +190,9 @@ class MainStore {
 
             for (var j = 0; j < myRoomsArray.length; j++) {
                 if (i != j && myRoomsArray[i].roomId == myRoomsArray[j].roomId) {
+
                     return false;
-                    break;
+
                 }
             }
         }
