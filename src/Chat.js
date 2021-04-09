@@ -48,7 +48,7 @@ const Chat = (props) => {
         setRoomId(props.navigation.getParam('sendRoomId'))
         setTimeout(() => {
             setWait(true)
-        }, 50);
+        }, 300);
 
     })
 
