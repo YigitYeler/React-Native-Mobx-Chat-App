@@ -39,6 +39,7 @@ const Home = (props) => {
     })
 
     useEffect(() => {
+
         listenForChange();
         setTimeout(() => {
             setWait(true)
@@ -81,6 +82,8 @@ const Home = (props) => {
             }
         })
     }
+
+
 
     /*database().ref("Rooms").orderByKey().on('value', snapshot => {
     
@@ -133,29 +136,30 @@ const Home = (props) => {
                 <ScrollView >
 
                     <View style={style.cards} >
-                        {
-                            wait ? myRooms.map((room) => {
-                                return (
-                                    <TouchableOpacity key={room.roomId} onPress={() => props.navigation.navigate('Chat')}>
-                                        <View style={style.card} >
-                                            <View style={style.inCard}>
-                                                <Image style={style.inCardImage} source={require('../images/Ben.jpeg')} />
-                                                <View style={style.inCardRoomName}>
-                                                    <Text style={{ color: '#CECECE', fontSize: hp('2.5%') }}>{room.roomName}</Text>
-                                                    <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>Hello</Text>
-                                                </View>
-                                                <View style={style.inCardDate}>
-                                                    <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>10.11.2021</Text>
-                                                </View>
-
+                        {wait ? myRooms.map((room) => {
+                            return (
+                                <TouchableOpacity key={room.roomId} onPress={() => {
+                                    props.navigation.navigate('Chat', { sendRoomId: room.roomId })
+                                }}>
+                                    <View style={style.card} >
+                                        <View style={style.inCard}>
+                                            <Image style={style.inCardImage} source={require('../images/Ben.jpeg')} />
+                                            <View style={style.inCardRoomName}>
+                                                <Text style={{ color: '#CECECE', fontSize: hp('2.5%') }}>{room.roomName}</Text>
+                                                <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>Hello</Text>
                                             </View>
-                                        </View>
-                                    </TouchableOpacity>
-                                )
+                                            <View style={style.inCardDate}>
+                                                <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>10.11.2021</Text>
+                                            </View>
 
-                            })
-                                :
-                                <BallIndicator color={"white"} />
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            )
+
+                        })
+                            :
+                            <BallIndicator color={"white"} />
                         }
 
                     </View>

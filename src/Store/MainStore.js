@@ -198,6 +198,20 @@ class MainStore {
         }
         return true;
     }
+
+    @action filterMessagesArray(messagesArray) {
+        for (var i = 0; i < messagesArray.length; i++) {
+
+            for (var j = 0; j < messagesArray.length; j++) {
+                if (i != j && messagesArray[i].message == messagesArray[j].message) {
+
+                    return false;
+
+                }
+            }
+        }
+        return true;
+    }
 }
 
 export default new MainStore();

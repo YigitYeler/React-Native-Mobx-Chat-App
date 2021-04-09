@@ -1,12 +1,80 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Image, Dimensions, TextInput } from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
+import { BallIndicator } from 'react-native-indicators'
+import MainStore from './Store/MainStore';
 
-const Chat = () => {
+
+const Chat = (props) => {
+
+    const [message, setMessage] = useState("");
+    const [messagesArrayState, setMessagesArray] = useState([]);
+    const [roomId, setRoomId] = useState("");
+    const [wait, setWait] = useState(false);
+    const [isWriter, setIsWriter] = useState(false);
+    const [userId, setUserId] = useState("");
+
+    props.navigation.addListener("willFocus", () => {
+        setRoomId(props.navigation.getParam('sendRoomId'))
+        setWait(false)
+    })
+
+    useEffect(() => {
+        listenForChange();
+        setTimeout(() => {
+            setWait(true)
+        }, 1000)
+    })
+
+    const listenForChange = () => {
+        auth().onAuthStateChanged((user) => {
+            if (user) {
+                setUserId(user.uid)
+                database().ref("Rooms/" + roomId + "/Messages").orderByKey().on('child_added', (snapshot) => {
+
+                    let comingMessages = {
+                        key: snapshot.key,
+                        userId: snapshot.val().user,
+                        message: snapshot.val().message
+                    }
+                    var messagesArray = messagesArrayState;
+                    messagesArray.push(comingMessages);
+
+                    if (MainStore.filterMessagesArray(messagesArray)) {
+                        setMessagesArray(messagesArray);
+                    }
+                    else {
+                        messagesArray.pop();
+                    }
+                })
+            }
+        })
+    }
+
+    const sendMessage = () => {
+        setWait(false)
+
+        auth().onAuthStateChanged((user) => {
+            var userid = user.uid
+            if (user) {
+                database()
+                    .ref('Rooms/' + roomId + "/Messages")
+                    .push({
+                        message: message,
+                        user: userid
+
+                    });
+            }
+        });
+
+    }
+
     return (
         <View style={[style.pageAll, { flexDirection: 'column', flex: 1 }]}>
-            <View style={{ flex: 1.8 }}>
+            {/*<View style={{ flex: 1.8 }}>
                 <ScrollView
                     style={style.headerUsers}
                     horizontal
@@ -36,9 +104,57 @@ const Chat = () => {
                         <Text style={{ textAlign: 'center', color: 'white' }}>Yiğit</Text>
                     </View>
                 </ScrollView>
-            </View>
+            </View>*/}
             <View style={{ flex: 8 }}>
                 <ScrollView>
+                    <View style={style.rightMessagePosition} >
+                        <View style={style.rightMessageTime}>
+                            <Text style={style.leftMessageTimeText}>9.30 PM</Text>
+                        </View>
+                        <View style={style.rightMessage}>
+                            <Text style={style.messageText}>
+                                {roomId}
+                            </Text>
+                        </View>
+                    </View>
+                    {wait ?
+                        messagesArrayState.map((item) => {
+                            if (userId == item.userId) {
+                                return (
+                                    <View key={item.key} style={style.rightMessagePosition} >
+                                        <View style={style.rightMessageTime}>
+                                            <Text style={style.leftMessageTimeText}>9.30 PM</Text>
+                                        </View>
+                                        <View style={style.rightMessage}>
+                                            <Text style={style.messageText}>
+                                                {item.message}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                )
+
+                            } else {
+                                return (
+                                    <View key={item.key}>
+                                        <View style={style.leftMessageTime}>
+                                            <Text style={style.leftMessageTimeText}>9.30 PM</Text>
+                                        </View>
+                                        <View style={style.leftMessage}>
+                                            <Text style={style.messageText}>
+                                                {item.message}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                )
+                            }
+
+                        })
+                        :
+                        <BallIndicator color={"blue"} />}
+                </ScrollView>
+
+
+                {/*<ScrollView>
                     <View style={{ marginTop: '10%' }}>
                         <View >
                             <View style={style.leftMessageTime}>
@@ -138,14 +254,14 @@ const Chat = () => {
                         </View>
 
                     </View>
-                </ScrollView>
+                </ScrollView>*/}
 
             </View>
             <View style={{ flex: 1.2 }}>
                 <View style={style.textInputView}>
-                    <TextInput style={{ height: hp('7.8%'), color: '#707070', paddingHorizontal: 20, paddingRight: '18%' }} placeholder={'Your Message..'} placeholderTextColor={'#707070'} />
+                    <TextInput onChangeText={(text) => setMessage(text)} style={{ height: hp('7.8%'), color: '#707070', paddingHorizontal: 20, paddingRight: '18%' }} placeholder={'Your Message..'} placeholderTextColor={'#707070'} />
 
-                    <TouchableOpacity style={style.sendMessage}>
+                    <TouchableOpacity onPress={sendMessage} style={style.sendMessage}>
                         <View >
 
                             <Icon size={20} name={"paper-plane"} color='white' solid />
