@@ -18,10 +18,10 @@ const resetAction = StackActions.reset({
 
 
 const Home = (props) => {
-
+    const [wait, setWait] = useState(false);
     const [myRooms, getMyRooms] = useState([]);
     const [userId, setUserId] = useState();
-    const [wait, setWait] = useState(false);
+
 
     /*const signOut = () => {
         auth().signOut().then(() => {
@@ -29,11 +29,9 @@ const Home = (props) => {
             props.navigation.dispatch(resetAction);
         }).catch((error) => {
             // An error happened.
-
         });
     }*/
-
-    props.navigation.addListener("willFocus", () => {
+    props.navigation.addListener("willBlur", () => {
         listenForChange();
         setWait(false)
     })
@@ -43,8 +41,11 @@ const Home = (props) => {
         listenForChange();
         setTimeout(() => {
             setWait(true)
-        }, 1000)
+        }, 3000)
+
+
     })
+
 
     const listenForChange = () => {
 
@@ -67,9 +68,12 @@ const Home = (props) => {
                                     roomName: snapshot.val().RoomName
                                 }
                                 var myRoomsArray = myRooms;
-                                myRoomsArray.push(myRoomsDb);
+
                                 if (MainStore.filterRoomArray(myRoomsArray)) {
+
+                                    myRoomsArray.push(myRoomsDb);
                                     getMyRooms(myRoomsArray)
+
                                 }
                                 else {
                                     myRoomsArray.pop();
@@ -82,8 +86,6 @@ const Home = (props) => {
             }
         })
     }
-
-
 
     /*database().ref("Rooms").orderByKey().on('value', snapshot => {
     
@@ -136,30 +138,29 @@ const Home = (props) => {
                 <ScrollView >
 
                     <View style={style.cards} >
-                        {wait ? myRooms.map((room) => {
-                            return (
-                                <TouchableOpacity key={room.roomId} onPress={() => {
-                                    props.navigation.navigate('Chat', { sendRoomId: room.roomId })
-                                }}>
-                                    <View style={style.card} >
-                                        <View style={style.inCard}>
-                                            <Image style={style.inCardImage} source={require('../images/Ben.jpeg')} />
-                                            <View style={style.inCardRoomName}>
-                                                <Text style={{ color: '#CECECE', fontSize: hp('2.5%') }}>{room.roomName}</Text>
-                                                <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>Hello</Text>
-                                            </View>
-                                            <View style={style.inCardDate}>
-                                                <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>10.11.2021</Text>
-                                            </View>
+                        {
+                            wait ? myRooms.map((room) => {
+                                return (
+                                    <TouchableOpacity key={room.roomId} onPress={() => {
+                                        props.navigation.navigate('Chat', { sendRoomId: room.roomId })
+                                    }}>
+                                        <View style={style.card} >
+                                            <View style={style.inCard}>
+                                                <Image style={style.inCardImage} source={require('../images/Ben.jpeg')} />
+                                                <View style={style.inCardRoomName}>
+                                                    <Text style={{ color: '#CECECE', fontSize: hp('2.5%') }}>{room.roomName}</Text>
+                                                    <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>Hello</Text>
+                                                </View>
+                                                <View style={style.inCardDate}>
+                                                    <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>10.11.2021</Text>
+                                                </View>
 
+                                            </View>
                                         </View>
-                                    </View>
-                                </TouchableOpacity>
-                            )
+                                    </TouchableOpacity>
+                                )
 
-                        })
-                            :
-                            <BallIndicator color={"white"} />
+                            }) : <BallIndicator color={"white"} />
                         }
 
                     </View>
@@ -175,6 +176,8 @@ const Home = (props) => {
 
         </View >
     )
+
+
 }
 
 const style = StyleSheet.create({

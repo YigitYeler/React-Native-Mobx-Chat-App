@@ -212,6 +212,10 @@ class MainStore {
         }
         return true;
     }
+
+    @action getMyRooms() {
+
+    }
 }
 
 export default new MainStore();
