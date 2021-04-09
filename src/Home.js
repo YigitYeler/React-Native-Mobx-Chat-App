@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallBack, useLayoutEffect, useContext } from 'react'
+import React, { useEffect, useState, useLayoutEffect } from 'react'
 import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Image, Dimensions } from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -31,61 +31,64 @@ const Home = (props) => {
             // An error happened.
         });
     }*/
-    props.navigation.addListener("willBlur", () => {
+    /*props.navigation.addListener("willBlur", () => {
         listenForChange();
         setWait(false)
+    })*/
+    auth().onAuthStateChanged((user) => {
+        if (user) {
+            setUserId(user.uid);
+
+            database().ref("Rooms").orderByKey().on('child_added', (snapshot) => {
+                //console.log(snapshot.key);
+
+                //console.log(room.key)
+                for (var i = 0; i < snapshot.val().Users.userIdArray.length; i++) {
+                    //console.log(room.val().Users.userIdArray[i])
+
+                    if (userId == snapshot.val().Users.userIdArray[i]) {
+                        database().ref("Rooms").child(snapshot.key).orderByKey().on('value', snapshot => {
+
+                            let myRoomsDb = {
+                                roomId: snapshot.key,
+                                roomName: snapshot.val().RoomName
+                            }
+                            var myRoomsArray = myRooms;
+
+                            if (MainStore.filterRoomArray(myRoomsArray)) {
+
+                                myRoomsArray.push(myRoomsDb);
+                                getMyRooms(myRoomsArray)
+
+                            }
+                            else {
+                                myRoomsArray.pop();
+                            }
+                        })
+                    }
+                }
+
+            })
+        }
     })
 
     useEffect(() => {
 
-        listenForChange();
-        setTimeout(() => {
+
+        const delay = setTimeout(() => {
             setWait(true)
         }, 3000)
 
+        return function clearMyInterval() {
+            clearInterval(delay)
+        }
+    }, [myRooms])
 
-    })
 
 
-    const listenForChange = () => {
 
-        auth().onAuthStateChanged((user) => {
-            if (user) {
-                setUserId(user.uid);
 
-                database().ref("Rooms").orderByKey().on('child_added', (snapshot) => {
-                    //console.log(snapshot.key);
 
-                    //console.log(room.key)
-                    for (var i = 0; i < snapshot.val().Users.userIdArray.length; i++) {
-                        //console.log(room.val().Users.userIdArray[i])
-
-                        if (userId == snapshot.val().Users.userIdArray[i]) {
-                            database().ref("Rooms").child(snapshot.key).orderByKey().on('value', snapshot => {
-
-                                let myRoomsDb = {
-                                    roomId: snapshot.key,
-                                    roomName: snapshot.val().RoomName
-                                }
-                                var myRoomsArray = myRooms;
-
-                                if (MainStore.filterRoomArray(myRoomsArray)) {
-
-                                    myRoomsArray.push(myRoomsDb);
-                                    getMyRooms(myRoomsArray)
-
-                                }
-                                else {
-                                    myRoomsArray.pop();
-                                }
-                            })
-                        }
-                    }
-
-                })
-            }
-        })
-    }
 
     /*database().ref("Rooms").orderByKey().on('value', snapshot => {
     
