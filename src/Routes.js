@@ -36,6 +36,7 @@ import Login from './Login';
 import SignUp from './SignUp';
 import CreateRoom from './CreateRoom';
 import JoinRoom from './JoinRoom';
+import Logout from './Logout';
 
 const CreateAndJoinBottom = createBottomTabNavigator(
     {
@@ -43,6 +44,9 @@ const CreateAndJoinBottom = createBottomTabNavigator(
 
         JoinRoom: {
             screen: JoinRoom
+        },
+        Logout: {
+            screen: Logout
         }
     },
 

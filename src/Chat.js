@@ -17,6 +17,8 @@ const Chat = (props) => {
     const [wait, setWait] = useState(false);
     const [isWriter, setIsWriter] = useState(false);
     const [userId, setUserId] = useState("");
+    const [count, setCount] = useState(0);
+
     const listenForChange = () => {
         auth().onAuthStateChanged((user) => {
             if (user) {
@@ -48,14 +50,18 @@ const Chat = (props) => {
 
 
     useLayoutEffect(() => {
-        listenForChange();
         setRoomId(props.navigation.getParam('sendRoomId'))
+        listenForChange();
+        const delay2 = setInterval(() => {
+            setCount(count + 0.1)
+        }, 1000);
         const delay = setTimeout(() => {
             setWait(true)
         }, 300);
 
         return function clearMyInterval() {
             clearInterval(delay)
+            clearInterval(delay2)
         }
     })
 
@@ -82,52 +88,15 @@ const Chat = (props) => {
 
     return (
         <View style={[style.pageAll, { flexDirection: 'column', flex: 1 }]}>
-            {/*<View style={{ flex: 1.8 }}>
-                <ScrollView
-                    style={style.headerUsers}
-                    horizontal
-                >
-                    <View style={style.person}>
-                        <Image style={style.images} source={require('../images/Ben.jpeg')} />
-                        <Text style={{ textAlign: 'center', color: 'white' }}>Yiğit</Text>
-                    </View>
-                    <View style={style.person}>
-                        <Image style={style.images} source={require('../images/Ben.jpeg')} />
-                        <Text style={{ textAlign: 'center', color: 'white' }}>Yiğit</Text>
-                    </View>
-                    <View style={style.person}>
-                        <Image style={style.images} source={require('../images/Ben.jpeg')} />
-                        <Text style={{ textAlign: 'center', color: 'white' }}>Yiğit</Text>
-                    </View>
-                    <View style={style.person}>
-                        <Image style={style.images} source={require('../images/Ben.jpeg')} />
-                        <Text style={{ textAlign: 'center', color: 'white' }}>Yiğit</Text>
-                    </View>
-                    <View style={style.person}>
-                        <Image style={style.images} source={require('../images/Ben.jpeg')} />
-                        <Text style={{ textAlign: 'center', color: 'white' }}>Yiğit</Text>
-                    </View>
-                    <View style={style.person}>
-                        <Image style={style.images} source={require('../images/Ben.jpeg')} />
-                        <Text style={{ textAlign: 'center', color: 'white' }}>Yiğit</Text>
-                    </View>
-                </ScrollView>
-            </View>*/}
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ color: 'white' }} selectable>RoomId:  {roomId}</Text>
+            </View>
             <View style={{ flex: 8 }}>
                 <ScrollView
                     ref={scrollViewRef}
                     onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: false })}>
 
-                    <View style={style.rightMessagePosition} >
-                        <View style={style.rightMessageTime}>
-                            <Text style={style.leftMessageTimeText}>9.30 PM</Text>
-                        </View>
-                        <View style={style.rightMessage}>
-                            <Text style={style.messageText}>
-                                {roomId}
-                            </Text>
-                        </View>
-                    </View>
+
                     {wait ? messagesArrayState.map((item) => {
                         if (userId == item.userId) {
                             return (

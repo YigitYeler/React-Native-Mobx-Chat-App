@@ -19,9 +19,6 @@ const CreateRoom = (props) => {
             <View style={style.header}>
                 <Text style={style.title}>Create Chat Room</Text>
             </View>
-            <View style={style.logo_area}>
-                <Image style={{ borderColor: '#6443D4', borderWidth: 5, borderRadius: 300, height: hp('17%'), width: wp('30%') }} source={require('../images/Ben.jpeg')}></Image>
-            </View>
             <View style={style.board}>
 
 

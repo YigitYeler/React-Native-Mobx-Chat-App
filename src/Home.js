@@ -23,18 +23,8 @@ const Home = (props) => {
     const [userId, setUserId] = useState();
 
 
-    /*const signOut = () => {
-        auth().signOut().then(() => {
-            // Sign-out successful.
-            props.navigation.dispatch(resetAction);
-        }).catch((error) => {
-            // An error happened.
-        });
-    }*/
-    /*props.navigation.addListener("willBlur", () => {
-        listenForChange();
-        setWait(false)
-    })*/
+
+
     auth().onAuthStateChanged((user) => {
         if (user) {
             setUserId(user.uid);
@@ -105,38 +95,6 @@ const Home = (props) => {
     return (
 
         <View style={[style.pageAll, { flexDirection: 'column', flex: 1 }]}>
-            {/*<View style={{ flex: 1 }}>
-                <ScrollView
-                    style={style.headerUsers}
-                    horizontal
-                >
-                    <View style={style.person}>
-                        <Image style={style.images} source={require('../images/Ben.jpeg')} />
-                        <Text style={{ textAlign: 'center', color: 'white' }}>Yiğit</Text>
-                    </View>
-                    <View style={style.person}>
-                        <Image style={style.images} source={require('../images/Ben.jpeg')} />
-                        <Text style={{ textAlign: 'center', color: 'white' }}>Yiğit</Text>
-                    </View>
-                    <View style={style.person}>
-                        <Image style={style.images} source={require('../images/Ben.jpeg')} />
-                        <Text style={{ textAlign: 'center', color: 'white' }}>Yiğit</Text>
-                    </View>
-                    <View style={style.person}>
-                        <Image style={style.images} source={require('../images/Ben.jpeg')} />
-                        <Text style={{ textAlign: 'center', color: 'white' }}>Yiğit</Text>
-                    </View>
-                    <View style={style.person}>
-                        <Image style={style.images} source={require('../images/Ben.jpeg')} />
-                        <Text style={{ textAlign: 'center', color: 'white' }}>Yiğit</Text>
-                    </View>
-                    <View style={style.person}>
-                        <Image style={style.images} source={require('../images/Ben.jpeg')} />
-                        <Text style={{ textAlign: 'center', color: 'white' }}>Yiğit</Text>
-                    </View>
-
-                </ScrollView>
-            </View>*/}
             <View style={{ flex: 4 }}>
                 <ScrollView >
 
@@ -149,13 +107,8 @@ const Home = (props) => {
                                     }}>
                                         <View style={style.card} >
                                             <View style={style.inCard}>
-                                                <Image style={style.inCardImage} source={require('../images/Ben.jpeg')} />
                                                 <View style={style.inCardRoomName}>
                                                     <Text style={{ color: '#CECECE', fontSize: hp('2.5%') }}>{room.roomName}</Text>
-                                                    <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>Hello</Text>
-                                                </View>
-                                                <View style={style.inCardDate}>
-                                                    <Text style={{ color: '#CECECE', fontSize: hp('1.8%') }}>10.11.2021</Text>
                                                 </View>
 
                                             </View>
@@ -163,7 +116,7 @@ const Home = (props) => {
                                     </TouchableOpacity>
                                 )
 
-                            }) : <BallIndicator color={"white"} />
+                            }) : <BallIndicator color={"blue"} />
                         }
 
                     </View>
