@@ -43,18 +43,24 @@ const Chat = (props) => {
     }
 
 
+
+
+
+
     useLayoutEffect(() => {
         listenForChange();
         setRoomId(props.navigation.getParam('sendRoomId'))
-        setTimeout(() => {
+        const delay = setTimeout(() => {
             setWait(true)
         }, 300);
 
+        return function clearMyInterval() {
+            clearInterval(delay)
+        }
     })
 
 
     const sendMessage = () => {
-        setWait(false)
 
         auth().onAuthStateChanged((user) => {
             var userid = user.uid
@@ -68,8 +74,10 @@ const Chat = (props) => {
                     });
             }
         });
+        setTimeout(() => {
+            setMessage("");
+        }, 100);
 
-        setMessage("");
     }
 
     return (
@@ -120,7 +128,7 @@ const Chat = (props) => {
                             </Text>
                         </View>
                     </View>
-                    {messagesArrayState.map((item) => {
+                    {wait ? messagesArrayState.map((item) => {
                         if (userId == item.userId) {
                             return (
                                 <View key={item.key} style={style.rightMessagePosition} >
@@ -150,7 +158,7 @@ const Chat = (props) => {
                             )
                         }
 
-                    })
+                    }) : <BallIndicator color={"blue"} />
                     }
                 </ScrollView>
 
