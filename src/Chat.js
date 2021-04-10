@@ -76,7 +76,7 @@ const Chat = (props) => {
         });
         setTimeout(() => {
             setMessage("");
-        }, 100);
+        }, 300);
 
     }
 
