@@ -28,7 +28,8 @@ const Chat = (props) => {
                     let comingMessages = {
                         key: snapshot.key,
                         userId: snapshot.val().user,
-                        message: snapshot.val().message
+                        message: snapshot.val().message,
+                        username: snapshot.val().username
                     }
                     var messagesArray = messagesArrayState;
                     messagesArray.push(comingMessages);
@@ -69,13 +70,15 @@ const Chat = (props) => {
     const sendMessage = () => {
 
         auth().onAuthStateChanged((user) => {
+            var username = user.displayName
             var userid = user.uid
             if (user) {
                 database()
                     .ref('Rooms/' + roomId + "/Messages")
                     .push({
                         message: message,
-                        user: userid
+                        user: userid,
+                        username: username
 
                     });
             }
@@ -118,7 +121,11 @@ const Chat = (props) => {
                                     <View style={style.leftMessageTime}>
                                         <Text style={style.leftMessageTimeText}>9.30 PM</Text>
                                     </View>
+                                    <View style={{ marginTop: "1%", paddingLeft: "5%", justifyContent: 'center' }}>
+                                        <Text style={{ color: 'white' }}>{item.username}</Text>
+                                    </View>
                                     <View style={style.leftMessage}>
+
                                         <Text style={style.messageText}>
                                             {item.message}
                                         </Text>
