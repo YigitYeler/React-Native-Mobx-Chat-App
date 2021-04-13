@@ -21,12 +21,12 @@ const Home = (props) => {
     const [wait, setWait] = useState(false);
     const [myRooms, getMyRooms] = useState([]);
     const [userId, setUserId] = useState();
-
-
+    const [count, setCount] = useState();
 
 
     auth().onAuthStateChanged((user) => {
         if (user) {
+            var myRoomsArray;
             setUserId(user.uid);
 
             database().ref("Rooms").orderByKey().on('child_added', (snapshot) => {
@@ -43,13 +43,11 @@ const Home = (props) => {
                                 roomId: snapshot.key,
                                 roomName: snapshot.val().RoomName
                             }
-                            var myRoomsArray = myRooms;
+                            myRoomsArray = myRooms;
+                            myRoomsArray.push(myRoomsDb);
 
                             if (MainStore.filterRoomArray(myRoomsArray)) {
-
-                                myRoomsArray.push(myRoomsDb);
                                 getMyRooms(myRoomsArray)
-
                             }
                             else {
                                 myRoomsArray.pop();
@@ -62,9 +60,14 @@ const Home = (props) => {
         }
     })
 
-    useEffect(() => {
 
 
+    props.navigation.addListener("willFocus", () => {
+        setCount(count + 0.1)
+    })
+
+
+    useLayoutEffect(() => {
         const delay = setTimeout(() => {
             setWait(true)
         }, 3000)

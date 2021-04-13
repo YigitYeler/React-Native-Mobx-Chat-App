@@ -15,7 +15,6 @@ const Chat = (props) => {
     const [messagesArrayState, setMessagesArray] = useState([]);
     const [roomId, setRoomId] = useState("");
     const [wait, setWait] = useState(false);
-    const [isWriter, setIsWriter] = useState(false);
     const [userId, setUserId] = useState("");
     const [count, setCount] = useState(0);
 
@@ -29,7 +28,8 @@ const Chat = (props) => {
                         key: snapshot.key,
                         userId: snapshot.val().user,
                         message: snapshot.val().message,
-                        username: snapshot.val().username
+                        username: snapshot.val().username,
+                        time: snapshot.val().time
                     }
                     var messagesArray = messagesArrayState;
                     messagesArray.push(comingMessages);
@@ -40,12 +40,30 @@ const Chat = (props) => {
                     else {
                         messagesArray.pop();
                     }
+
                 })
+
+
             }
         })
     }
 
+    const getTime = () => {
+        const date = new Date();
+        var hr = date.getHours();
+        var day = date.getDay();
+        var newHr = hr + 7;
+        var min = date.getMinutes();
+        var ampm = "am";
+        if (newHr > 12) {
+            ampm = "pm";
+        }
 
+        const Time = newHr + " " + min + " " + ampm;
+        return Time
+        //console.log(newHr + " " + min + ampm)
+        //console.log(day)
+    }
 
 
 
@@ -66,6 +84,9 @@ const Chat = (props) => {
         }
     })
 
+    const userList = () => {
+        props.navigation.navigate("UserList", { sendRoomId: roomId })
+    }
 
     const sendMessage = () => {
 
@@ -78,8 +99,8 @@ const Chat = (props) => {
                     .push({
                         message: message,
                         user: userid,
-                        username: username
-
+                        username: username,
+                        time: getTime()
                     });
             }
         });
@@ -91,8 +112,11 @@ const Chat = (props) => {
 
     return (
         <View style={[style.pageAll, { flexDirection: 'column', flex: 1 }]}>
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ color: 'white' }} selectable>RoomId:  {roomId}</Text>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row' }}>
+                <TouchableOpacity onPress={userList}>
+                    <Icon name={"user-friends"} color={"white"} size={27} style={{ padding: "5%" }} />
+                </TouchableOpacity>
+                <Text style={{ color: 'white', paddingLeft: '4%' }} selectable>RoomId:  {roomId}</Text>
             </View>
             <View style={{ flex: 8 }}>
                 <ScrollView
@@ -105,7 +129,7 @@ const Chat = (props) => {
                             return (
                                 <View key={item.key} style={style.rightMessagePosition} >
                                     <View style={style.rightMessageTime}>
-                                        <Text style={style.leftMessageTimeText}>9.30 PM</Text>
+                                        <Text style={style.leftMessageTimeText}>{item.time}</Text>
                                     </View>
                                     <View style={style.rightMessage}>
                                         <Text style={style.messageText}>
@@ -119,7 +143,7 @@ const Chat = (props) => {
                             return (
                                 <View key={item.key}>
                                     <View style={style.leftMessageTime}>
-                                        <Text style={style.leftMessageTimeText}>9.30 PM</Text>
+                                        <Text style={style.leftMessageTimeText}>{item.time}</Text>
                                     </View>
                                     <View style={{ marginTop: "1%", paddingLeft: "5%", justifyContent: 'center' }}>
                                         <Text style={{ color: 'white' }}>{item.username}</Text>

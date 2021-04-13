@@ -27,7 +27,7 @@ import {
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs'
-import auth from '@react-native-firebase/auth';
+import { createDrawerNavigator } from 'react-navigation-drawer'
 
 //import Chat from './Chat';
 import Home from './Home';
@@ -37,6 +37,9 @@ import SignUp from './SignUp';
 import CreateRoom from './CreateRoom';
 import JoinRoom from './JoinRoom';
 import Logout from './Logout';
+import UsersList from './UsersList';
+
+
 
 const CreateAndJoinBottom = createBottomTabNavigator(
     {
@@ -72,6 +75,10 @@ const MyApp = createStackNavigator({
     },
     Home: {
         screen: Home,
+        navigationOptions: { headerShown: false },
+    },
+    UserList: {
+        screen: UsersList,
         navigationOptions: { headerShown: false },
     },
     Chat: {
