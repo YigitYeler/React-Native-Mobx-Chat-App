@@ -93,7 +93,6 @@ class MainStore {
 
 
         auth().onAuthStateChanged((user) => {
-            var userid = user.uid
             if (user) {
                 /* database().ref("Users").orderByKey()
                      .once('value', snapshot => {
@@ -115,9 +114,12 @@ class MainStore {
                         RoomName: roomName,
                         Users: {
                             userIdArray: [user.uid]
-                        }
+                        },
+                        Usernames: user.displayName
 
                     });
+
+
             } else {
                 // No user is signed in.
             }
@@ -132,11 +134,11 @@ class MainStore {
         auth().onAuthStateChanged((user) => {
             if (user) {
                 var userid = user.uid;
+                var username = user.displayName;
                 userIdArray.push(userid);
                 if (roomId.length == 20) {
                     database().ref("Rooms").child(roomId).orderByKey()
                         .once("value", (snapshot) => {
-                            console.log(snapshot.key)
 
                             if (snapshot.val().Users.userIdArray != null) {
 
@@ -146,8 +148,9 @@ class MainStore {
                                         isEntry = true
                                     }
                                 }
-                                console.log(userIdArray)
                             }
+
+                            var firstUsername = snapshot.val().Usernames;
 
                             if (isEntry == false) {
 
@@ -155,6 +158,18 @@ class MainStore {
                                     .ref('Rooms').child(roomId).child("Users")
                                     .set({
                                         userIdArray
+                                    });
+
+                                database()
+                                    .ref('Rooms').child(roomId).child("Usernames")
+                                    .push({
+                                        firstUsername
+                                    });
+
+                                database()
+                                    .ref('Rooms').child(roomId).child("Usernames")
+                                    .push({
+                                        username
                                     });
                             }
                             else if (isEntry) {

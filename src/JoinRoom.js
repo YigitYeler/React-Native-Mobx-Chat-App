@@ -30,7 +30,7 @@ const JoinRoom = (props) => {
                             placeholderTextColor={'#707070'}
                             placeholder={'RoomID'}
                             style={style.input}
-                            onChangeText={(text) => joinRoomId(text)}
+                            onChangeText={(text) => joinRoomId("-MYjm7NkpVwJUylE2hWL")}
                         />
                     </View>
 

@@ -23,59 +23,65 @@ const Home = (props) => {
     const [userId, setUserId] = useState();
     const [count, setCount] = useState();
 
+    const listenForChange = () => {
+        auth().onAuthStateChanged((user) => {
+            if (user) {
+                var myRoomsArray;
+                setUserId(user.uid);
 
-    auth().onAuthStateChanged((user) => {
-        if (user) {
-            var myRoomsArray;
-            setUserId(user.uid);
+                database().ref("Rooms").orderByKey().on('child_added', (snapshot) => {
+                    //console.log(snapshot.key);
 
-            database().ref("Rooms").orderByKey().on('child_added', (snapshot) => {
-                //console.log(snapshot.key);
+                    //console.log(room.key)
+                    for (var i = 0; i < snapshot.val().Users.userIdArray.length; i++) {
+                        //console.log(room.val().Users.userIdArray[i])
 
-                //console.log(room.key)
-                for (var i = 0; i < snapshot.val().Users.userIdArray.length; i++) {
-                    //console.log(room.val().Users.userIdArray[i])
+                        if (userId == snapshot.val().Users.userIdArray[i]) {
+                            database().ref("Rooms").child(snapshot.key).orderByKey().on('value', snapshot => {
 
-                    if (userId == snapshot.val().Users.userIdArray[i]) {
-                        database().ref("Rooms").child(snapshot.key).orderByKey().on('value', snapshot => {
+                                let myRoomsDb = {
+                                    roomId: snapshot.key,
+                                    roomName: snapshot.val().RoomName
+                                }
+                                myRoomsArray = myRooms;
+                                myRoomsArray.push(myRoomsDb);
 
-                            let myRoomsDb = {
-                                roomId: snapshot.key,
-                                roomName: snapshot.val().RoomName
-                            }
-                            myRoomsArray = myRooms;
-                            myRoomsArray.push(myRoomsDb);
-
-                            if (MainStore.filterRoomArray(myRoomsArray)) {
-                                getMyRooms(myRoomsArray)
-                            }
-                            else {
-                                myRoomsArray.pop();
-                            }
-                        })
+                                if (MainStore.filterRoomArray(myRoomsArray)) {
+                                    getMyRooms(myRoomsArray)
+                                }
+                                else {
+                                    myRoomsArray.pop();
+                                }
+                            })
+                        }
                     }
-                }
 
-            })
-        }
-    })
+                })
+            }
+        })
+    }
+
 
 
 
     props.navigation.addListener("willFocus", () => {
-        setCount(count + 0.1)
+        listenForChange();
+        if (wait) {
+            setWait(false)
+        }
     })
 
 
     useLayoutEffect(() => {
+        listenForChange()
         const delay = setTimeout(() => {
             setWait(true)
-        }, 3000)
+        }, 1500)
 
         return function clearMyInterval() {
             clearInterval(delay)
         }
-    }, [myRooms])
+    })
 
 
 

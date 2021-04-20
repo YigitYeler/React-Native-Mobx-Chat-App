@@ -15,21 +15,25 @@ const UsersList = (props) => {
     const listenForChange = () => {
         auth().onAuthStateChanged((user) => {
             if (user) {
-                database().ref("Rooms/" + roomId + "/Messages").orderByKey().on('child_added', (snapshot) => {
+                database().ref("Rooms/" + roomId + "/Usernames").orderByKey().on('child_added', (snapshot) => {
 
-
-                    let comingUsers = {
-                        username: snapshot.val().username,
-                        key: snapshot.key
+                    let comingUserNames
+                    if (snapshot.val().username != undefined) {
+                        comingUserNames = {
+                            username: snapshot.val().username
+                        }
                     }
+                    else {
+                        comingUserNames = {
+                            username: snapshot.val().firstUsername
+                        }
+                    }
+
                     var userList = userListState;
-                    userList.push(comingUsers);
+                    userList.push(comingUserNames);
 
                     if (MainStore.filterMessagesArray(userList)) {
                         setUserList(userList);
-                    }
-                    else {
-                        userList.pop();
                     }
 
                 })
@@ -43,10 +47,9 @@ const UsersList = (props) => {
     useLayoutEffect(() => {
         setRoomId(props.navigation.getParam('sendRoomId'));
         listenForChange();
-        console.log(userListState);
         const delay = setTimeout(() => {
             setWait(true)
-        }, 3000);
+        }, 1000);
 
 
         return function clearMyInterval() {
@@ -54,6 +57,7 @@ const UsersList = (props) => {
         }
 
     })
+
     return (
         <View style={[style.pageAll, { flexDirection: 'column', flex: 1 }]}>
             <View style={{ flex: 4 }}>
@@ -61,7 +65,7 @@ const UsersList = (props) => {
 
                     {wait ?
                         userListState.map((item) => {
-                            return (<View style={style.cards} >
+                            return (<View key={item.username} style={style.cards} >
                                 <TouchableOpacity >
                                     <View key={item.key} style={style.card} >
                                         <View style={style.inCard}>
@@ -96,7 +100,7 @@ const style = StyleSheet.create({
     card: { alignSelf: 'flex-start', minHeight: hp('8%'), width: wp('90%'), borderRadius: 15, backgroundColor: '#414041', marginTop: '3.5%' },
     inCard: { flexDirection: 'row' },
     inCardImage: { height: hp('8%'), width: wp('13%'), borderRadius: 50, marginTop: '3.5%', marginLeft: '5%' },
-    inCardRoomName: { marginLeft: '6%', marginTop: '5%', width: wp('45%') },
+    inCardRoomName: { marginLeft: '6%', marginTop: '4%', width: wp('45%') },
     inCardDate: { flexDirection: 'row', marginTop: '5%', justifyContent: 'flex-end' },
     icons: { marginBottom: '25%', marginRight: '20%', justifyContent: 'center', alignItems: 'center', width: wp('16%'), height: hp('9%'), backgroundColor: '#6443D4', borderTopRightRadius: 20, borderTopLeftRadius: 20, borderBottomRightRadius: 20 }
 })

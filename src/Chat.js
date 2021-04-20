@@ -89,21 +89,24 @@ const Chat = (props) => {
     }
 
     const sendMessage = () => {
+        if (message != "") {
+            auth().onAuthStateChanged((user) => {
+                var username = user.displayName
+                var userid = user.uid
+                if (user) {
+                    database()
+                        .ref('Rooms/' + roomId + "/Messages")
+                        .push({
+                            message: message,
+                            user: userid,
+                            username: username,
+                            time: getTime()
+                        });
+                }
+            });
+        }
 
-        auth().onAuthStateChanged((user) => {
-            var username = user.displayName
-            var userid = user.uid
-            if (user) {
-                database()
-                    .ref('Rooms/' + roomId + "/Messages")
-                    .push({
-                        message: message,
-                        user: userid,
-                        username: username,
-                        time: getTime()
-                    });
-            }
-        });
+
         setTimeout(() => {
             setMessage("");
         }, 300);
