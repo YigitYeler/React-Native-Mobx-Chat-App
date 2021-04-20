@@ -9,19 +9,13 @@ import MainStore from './Store/MainStore';
 import { BallIndicator } from 'react-native-indicators'
 
 
-const resetAction = StackActions.reset({
-    index: 0, // <-- currect active route from actions array
-    actions: [
-        NavigationActions.navigate({ routeName: 'SignUp' }),
-    ],
-});
+
 
 
 const Home = (props) => {
     const [wait, setWait] = useState(false);
     const [myRooms, getMyRooms] = useState([]);
     const [userId, setUserId] = useState();
-    const [count, setCount] = useState();
 
     const listenForChange = () => {
         auth().onAuthStateChanged((user) => {

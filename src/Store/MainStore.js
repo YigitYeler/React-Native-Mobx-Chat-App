@@ -16,9 +16,6 @@ const resetAction = StackActions.reset({
 
 class MainStore {
 
-
-
-
     @action signUp(email, password, username, props) {
 
         if (email != "" && password != "" && username != "") {
@@ -33,14 +30,6 @@ class MainStore {
                             })
 
                             console.log(firebaseUser);
-
-                            database()
-                                .ref('Users')
-                                .push({
-                                    UserName: username,
-                                    UserID: firebaseUser.user.uid
-                                });
-
                             props.navigation.dispatch(resetAction);
 
                         })
