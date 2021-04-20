@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import { View, Text, SafeAreaView, StyleSheet, Image, TextInput, TouchableOpacity } from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome5'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MainStore from './Store/MainStore'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
 
-const CreateRoom = (props) => {
+const CreateRoom = () => {
 
     const [roomName, setRoomName] = useState("");
 
     const createMyRoom = () => {
         MainStore.createMyRoom(roomName);
+        setRoomName("");
     }
     return (
 
@@ -29,6 +27,7 @@ const CreateRoom = (props) => {
                             placeholderTextColor={'#707070'}
                             placeholder={'Room Name'}
                             style={style.input}
+                            value={roomName}
                             onChangeText={(text) => setRoomName(text)}
                         />
                     </View>

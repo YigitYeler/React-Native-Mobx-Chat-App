@@ -59,7 +59,6 @@ const Home = (props) => {
 
 
     props.navigation.addListener("willFocus", () => {
-        listenForChange();
         if (wait) {
             setWait(false)
         }

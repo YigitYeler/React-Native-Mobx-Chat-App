@@ -80,7 +80,6 @@ class MainStore {
 
     @action createMyRoom(roomName) {
 
-
         auth().onAuthStateChanged((user) => {
             if (user) {
                 /* database().ref("Users").orderByKey()

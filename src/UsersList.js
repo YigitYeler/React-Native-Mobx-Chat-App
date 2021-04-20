@@ -10,7 +10,6 @@ const UsersList = (props) => {
     const [userListState, setUserList] = useState([]);
     const [roomId, setRoomId] = useState("");
     const [wait, setWait] = useState(false);
-    const [count, setCount] = useState(0);
 
     const listenForChange = () => {
         auth().onAuthStateChanged((user) => {
