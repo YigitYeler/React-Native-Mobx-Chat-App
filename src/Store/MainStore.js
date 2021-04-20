@@ -65,9 +65,6 @@ class MainStore {
         if (email != "" && password != "") {
             auth().signInWithEmailAndPassword(email, password)
                 .then(() => {
-
-
-
                     props.navigation.dispatch(resetAction);
                 })
                 .catch((error) => {
@@ -78,40 +75,41 @@ class MainStore {
         }
     }
 
-    @action createMyRoom(roomName) {
-
-        auth().onAuthStateChanged((user) => {
-            if (user) {
-                /* database().ref("Users").orderByKey()
-                     .once('value', snapshot => {
-                         snapshot.forEach((dbUsers) => {
-                             console.log(dbUsers.key)
-                             if (dbUsers.val().UserID == user.uid) {
-                                 database()
-                                     .ref('Users').child(dbUsers.key).child('MyRooms')
-                                     .push({
-                                         MyRoomsArray: [userid]
-                                     });
-                             }
-                         })
-                     })*/
-
-                database()
-                    .ref('Rooms')
-                    .push({
-                        RoomName: roomName,
-                        Users: {
-                            userIdArray: [user.uid]
-                        },
-                        Usernames: user.displayName
-
-                    });
+    @action createMyRoom(roomName, user) {
 
 
-            } else {
-                // No user is signed in.
-            }
-        });
+        if (user) {
+
+            /* database().ref("Users").orderByKey()
+                 .once('value', snapshot => {
+                     snapshot.forEach((dbUsers) => {
+                         console.log(dbUsers.key)
+                         if (dbUsers.val().UserID == user.uid) {
+                             database()
+                                 .ref('Users').child(dbUsers.key).child('MyRooms')
+                                 .push({
+                                     MyRoomsArray: [userid]
+                                 });
+                         }
+                     })
+                 })*/
+
+            database()
+                .ref('Rooms')
+                .push({
+                    RoomName: roomName,
+                    Users: {
+                        userIdArray: [user.uid]
+                    },
+                    Usernames: user.displayName
+
+                });
+
+
+        } else {
+            // No user is signed in.
+        }
+
 
     }
 

@@ -2,13 +2,19 @@ import React, { useState } from "react";
 import { View, Text, SafeAreaView, StyleSheet, Image, TextInput, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MainStore from './Store/MainStore'
+import auth from '@react-native-firebase/auth';
 
 const CreateRoom = () => {
 
     const [roomName, setRoomName] = useState("");
+    const [user, setUser] = useState();
+
+    auth().onAuthStateChanged((user) => {
+        setUser(user);
+    });
 
     const createMyRoom = () => {
-        MainStore.createMyRoom(roomName);
+        MainStore.createMyRoom(roomName, user);
         setRoomName("");
     }
     return (
