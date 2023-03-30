@@ -1,5 +1,6 @@
 # React-Native-Mobx-Chat-App
 
+<img src="https://camo.githubusercontent.com/..." data-canonical-src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png" width="200" height="400" />
 ![WhatsApp Image 2023-03-30 at 14 16 45](https://user-images.githubusercontent.com/74016134/228820258-b1e17f15-0b2d-48f7-bd61-211715c5e85b.jpg =250x250)
 ![WhatsApp Image 2023-03-30 at 14 16 46](https://user-images.githubusercontent.com/74016134/228820272-c955373d-547e-4346-b86b-9609b6d00030.jpg | width=300)
 ![Wha 2023-03-30 at 14 16 47](https://user-images.githubusercontent.com/74016134/228820293-cacf1637-eb87-4d74-985c-b71ab5ccc312.jpg | width=300)
